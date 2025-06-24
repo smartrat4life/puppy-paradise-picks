@@ -1,0 +1,80 @@
+
+import React from 'react';
+import { Heart, Phone, Mail, MapPin } from 'lucide-react';
+
+const Footer = () => {
+  return (
+    <footer className="bg-amber-900 text-white py-12">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Logo and Description */}
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                src="/lovable-uploads/bd88e703-c689-4c38-8f0f-1048f3b8da46.png" 
+                alt="Pick a Puppy Logo" 
+                className="w-12 h-12 object-contain"
+              />
+              <h3 className="text-2xl font-bold">Pick a Puppy</h3>
+            </div>
+            <p className="text-amber-200 leading-relaxed mb-4">
+              Premium puppies from a trusted breeder with 13 years of experience. 
+              We're dedicated to connecting healthy, happy puppies with loving families.
+            </p>
+            <div className="flex items-center gap-2 text-amber-200">
+              <Heart className="w-5 h-5 text-red-400" />
+              <span>Breeding with love since 2010</span>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-xl font-bold mb-4">Our Breeds</h4>
+            <ul className="space-y-2 text-amber-200">
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">ShihTzu</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">Doberman</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">Cavapoo</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">GoldenDoodle</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">Chihuahua</li>
+              <li className="hover:text-white transition-colors duration-200 cursor-pointer">Dachshund</li>
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h4 className="text-xl font-bold mb-4">Contact Us</h4>
+            <div className="space-y-3 text-amber-200">
+              <div className="flex items-center gap-3">
+                <Phone className="w-5 h-5" />
+                <span>(555) 123-4567</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail className="w-5 h-5" />
+                <span>info@pickapuppy.com</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <MapPin className="w-5 h-5" />
+                <span>Texas, USA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-amber-700 mt-8 pt-8 text-center">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-amber-200">
+              © 2024 Pick a Puppy. All rights reserved.
+            </p>
+            <div className="flex gap-6 text-amber-200">
+              <span className="hover:text-white transition-colors duration-200 cursor-pointer">Privacy Policy</span>
+              <span className="hover:text-white transition-colors duration-200 cursor-pointer">Terms of Service</span>
+              <span className="hover:text-white transition-colors duration-200 cursor-pointer">Health Guarantee</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
