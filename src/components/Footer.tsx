@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Heart, Phone, Mail, MapPin } from 'lucide-react';
+import { Heart, Phone, Mail, MapPin, Instagram, Facebook } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -21,9 +21,31 @@ const Footer = () => {
               Premium puppies from a trusted breeder with 13 years of experience. 
               We're dedicated to connecting healthy, happy puppies with loving families.
             </p>
-            <div className="flex items-center gap-2 text-amber-200">
+            <div className="flex items-center gap-2 text-amber-200 mb-4">
               <Heart className="w-5 h-5 text-red-400" />
               <span>Breeding with love since 2010</span>
+            </div>
+            
+            {/* Social Media Links */}
+            <div className="flex gap-4">
+              <a 
+                href="https://instagram.com/pickapuppybreeder" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-amber-200 hover:text-pink-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full"
+              >
+                <Instagram className="w-5 h-5" />
+                <span className="text-sm">Instagram</span>
+              </a>
+              <a 
+                href="https://facebook.com/pickapuppybreeder" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-amber-200 hover:text-blue-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full"
+              >
+                <Facebook className="w-5 h-5" />
+                <span className="text-sm">Facebook</span>
+              </a>
             </div>
           </div>
 
@@ -46,11 +68,15 @@ const Footer = () => {
             <div className="space-y-3 text-amber-200">
               <div className="flex items-center gap-3">
                 <Phone className="w-5 h-5" />
-                <span>(555) 123-4567</span>
+                <a href="tel:+15551234567" className="hover:text-white transition-colors duration-200">
+                  (555) 123-4567
+                </a>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5" />
-                <span>info@pickapuppy.com</span>
+                <a href="mailto:info@pickapuppy.com" className="hover:text-white transition-colors duration-200">
+                  info@pickapuppy.com
+                </a>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="w-5 h-5" />
@@ -66,8 +92,8 @@ const Footer = () => {
               © 2024 Pick a Puppy. All rights reserved.
             </p>
             <div className="flex gap-6 text-amber-200">
-              <span className="hover:text-white transition-colors duration-200 cursor-pointer">Privacy Policy</span>
-              <span className="hover:text-white transition-colors duration-200 cursor-pointer">Terms of Service</span>
+              <a href="/pricing" className="hover:text-white transition-colors duration-200">Pricing & Policies</a>
+              <a href="/faq" className="hover:text-white transition-colors duration-200">FAQ</a>
               <span className="hover:text-white transition-colors duration-200 cursor-pointer">Health Guarantee</span>
             </div>
           </div>
