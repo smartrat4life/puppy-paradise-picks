@@ -1,50 +1,128 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { Heart, Star, Award, Instagram, Facebook } from 'lucide-react';
 
 const Hero = () => {
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <section className="relative bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 py-20 overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmYmY3ZjMiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJtMzYgMzRjMC0yLjIwOSAxLjc5MS00IDQtNHM0IDEuNzkxIDQgNC0xLjc5MSA0LTQgNC00LTEuNzkxLTQtNHptLTI0IDBjMC0yLjIwOSAxLjc5MS00IDQtNHM0IDEuNzkxIDQgNC0xLjc5MSA0LTQgNC00LTEuNzkxLTQtNHoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-30"></div>
-      
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold text-amber-900 mb-6 leading-tight">
-            Find Your Perfect
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
-              Furry Friend
-            </span>
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-amber-700 mb-8 leading-relaxed max-w-2xl mx-auto">
-            Discover adorable, healthy puppies from loving breeders. Your new best friend is waiting for you.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-              onClick={() => document.getElementById('available')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Browse Puppies
-            </Button>
-            
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-2 border-amber-600 text-amber-700 hover:bg-amber-600 hover:text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Contact Us
-            </Button>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('/lovable-uploads/2dfe2e53-b4b0-40be-a1d0-80e6a5782e20.png')`,
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
+      </div>
+
+      {/* Decorative elements */}
+      <div className="absolute top-20 left-20 text-teal-300 opacity-60 animate-bounce">
+        <div className="w-8 h-8 bg-teal-200 rounded-full"></div>
+      </div>
+      <div className="absolute top-40 right-32 text-orange-300 opacity-60 animate-pulse">
+        <div className="w-6 h-6 bg-orange-200 rounded-full"></div>
+      </div>
+      <div className="absolute bottom-32 left-40 text-amber-300 opacity-60 animate-bounce delay-300">
+        <div className="w-10 h-10 bg-amber-200 rounded-full"></div>
+      </div>
+
+      <div className="container mx-auto px-6 text-center relative z-10">
+        {/* Logo */}
+        <div className="mb-8 animate-fade-in">
+          <img 
+            src="/lovable-uploads/bd88e703-c689-4c38-8f0f-1048f3b8da46.png" 
+            alt="Pick a Puppy Logo" 
+            className="mx-auto w-48 h-48 object-contain hover:scale-105 transition-transform duration-300 drop-shadow-2xl"
+          />
+        </div>
+
+        {/* Main heading */}
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in delay-200 drop-shadow-2xl">
+          Find Your Perfect
+          <span className="block text-teal-300">Furry Companion</span>
+        </h1>
+
+        {/* Subheading */}
+        <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto animate-fade-in delay-400 drop-shadow-lg">
+          Premium puppies from a trusted breeder with 13 years of experience. 
+          Specializing in ShihTzu, Doberman, Cavapoo, GoldenDoodle, Chihuahua, and Dachshund breeds.
+        </p>
+
+        {/* Trust indicators */}
+        <div className="flex justify-center items-center gap-8 mb-10 animate-fade-in delay-500 flex-wrap">
+          <div className="flex items-center gap-2 text-white/90 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
+            <Award className="w-6 h-6 text-teal-400" />
+            <span className="font-semibold">13+ Years Experience</span>
+          </div>
+          <div className="flex items-center gap-2 text-white/90 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
+            <Heart className="w-6 h-6 text-red-400" />
+            <span className="font-semibold">Health Guaranteed</span>
+          </div>
+          <div className="flex items-center gap-2 text-white/90 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
+            <Star className="w-6 h-6 text-yellow-500" />
+            <span className="font-semibold">Premium Bloodlines</span>
           </div>
         </div>
-        
-        {/* Floating elements */}
-        <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-orange-200 to-red-200 rounded-full opacity-60 animate-bounce delay-1000"></div>
-        <div className="absolute bottom-20 right-10 w-16 h-16 bg-gradient-to-br from-teal-200 to-blue-200 rounded-full opacity-60 animate-bounce delay-2000"></div>
-        <div className="absolute top-32 right-20 w-12 h-12 bg-gradient-to-br from-amber-200 to-yellow-200 rounded-full opacity-60 animate-bounce"></div>
+
+        {/* Social Media Links */}
+        <div className="flex justify-center items-center gap-6 mb-10 animate-fade-in delay-600">
+          <a 
+            href="https://instagram.com/pickapuppybreeder" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-white/90 hover:text-pink-400 transition-colors duration-300 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm hover:bg-black/50"
+          >
+            <Instagram className="w-5 h-5" />
+            <span className="text-sm font-medium">Follow our puppies on Instagram</span>
+          </a>
+          <a 
+            href="https://facebook.com/pickapuppybreeder" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-white/90 hover:text-blue-400 transition-colors duration-300 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm hover:bg-black/50"
+          >
+            <Facebook className="w-5 h-5" />
+            <span className="text-sm font-medium">Like us on Facebook</span>
+          </a>
+        </div>
+
+        {/* CTA buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in delay-700">
+          <Button 
+            size="lg" 
+            className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 border-2 border-teal-500"
+            onClick={() => scrollToSection('available-puppies')}
+          >
+            See Available Puppies
+          </Button>
+          <Button 
+            variant="outline" 
+            size="lg" 
+            className="border-2 border-white text-white hover:bg-white hover:text-amber-900 px-8 py-4 text-lg font-semibold rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+            onClick={() => scrollToSection('breeds')}
+          >
+            Explore Our Breeds
+          </Button>
+        </div>
+
+        {/* Video Call to Action */}
+        <div className="mt-8 animate-fade-in delay-800">
+          <p className="text-white/80 text-sm mb-4">
+            📹 Watch our puppies playing, eating, and being loved!
+          </p>
+          <Button 
+            variant="ghost" 
+            className="text-white/90 hover:text-white hover:bg-white/20 transition-all duration-300"
+            onClick={() => scrollToSection('available-puppies')}
+          >
+            View Puppy Videos →
+          </Button>
+        </div>
       </div>
     </section>
   );
