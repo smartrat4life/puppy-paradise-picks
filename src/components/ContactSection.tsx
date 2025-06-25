@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -16,22 +18,53 @@ const ContactSection = () => {
     interestedBreed: '',
     message: ''
   });
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    toast({
-      title: "Thank you for your inquiry!",
-      description: "We'll get back to you within 24 hours.",
-    });
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      interestedBreed: '',
-      message: ''
-    });
+    setLoading(true);
+
+    try {
+      // Insert inquiry into database
+      const { error } = await supabase
+        .from('inquiries')
+        .insert([
+          {
+            user_id: user?.id || null,
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            message: `Interested in: ${formData.interestedBreed}\n\n${formData.message}`,
+          }
+        ]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Thank you for your inquiry!",
+        description: "We'll get back to you within 24 hours.",
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        interestedBreed: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error submitting inquiry:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit inquiry. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (field: string, value: string) => {
@@ -187,9 +220,10 @@ const ContactSection = () => {
                 <Button 
                   type="submit"
                   size="lg"
+                  disabled={loading}
                   className="w-full bg-teal-600 hover:bg-teal-700 text-white py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
-                  Send Message
+                  {loading ? 'Sending...' : 'Send Message'}
                 </Button>
               </form>
             </CardContent>

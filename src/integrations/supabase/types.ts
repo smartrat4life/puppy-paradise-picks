@@ -9,7 +9,274 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      adoption_applications: {
+        Row: {
+          admin_notes: string | null
+          applicant_email: string
+          applicant_name: string
+          applicant_phone: string | null
+          created_at: string
+          experience_with_pets: string | null
+          id: string
+          living_situation: string | null
+          puppy_id: string | null
+          reason_for_adoption: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          applicant_email: string
+          applicant_name: string
+          applicant_phone?: string | null
+          created_at?: string
+          experience_with_pets?: string | null
+          id?: string
+          living_situation?: string | null
+          puppy_id?: string | null
+          reason_for_adoption?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          applicant_email?: string
+          applicant_name?: string
+          applicant_phone?: string | null
+          created_at?: string
+          experience_with_pets?: string | null
+          id?: string
+          living_situation?: string | null
+          puppy_id?: string | null
+          reason_for_adoption?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "adoption_applications_puppy_id_fkey"
+            columns: ["puppy_id"]
+            isOneToOne: false
+            referencedRelation: "puppies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_posts: {
+        Row: {
+          author_id: string | null
+          content: string
+          created_at: string
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          published: boolean | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          content: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          published?: boolean | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          published?: boolean | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      inquiries: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          puppy_id: string | null
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          puppy_id?: string | null
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          puppy_id?: string | null
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inquiries_puppy_id_fkey"
+            columns: ["puppy_id"]
+            isOneToOne: false
+            referencedRelation: "puppies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      newsletter_subscriptions: {
+        Row: {
+          email: string
+          id: string
+          is_active: boolean | null
+          name: string | null
+          subscribed_at: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          is_active?: boolean | null
+          name?: string | null
+          subscribed_at?: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string | null
+          subscribed_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          is_admin: boolean | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          is_admin?: boolean | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          is_admin?: boolean | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      puppies: {
+        Row: {
+          birth_date: string
+          breed: string
+          created_at: string
+          description: string | null
+          father_id: string | null
+          gender: string
+          health_records: string | null
+          id: string
+          image_urls: string[] | null
+          mother_id: string | null
+          name: string
+          price: number
+          status: string
+          updated_at: string
+          vaccinations: string[] | null
+          video_urls: string[] | null
+          weight: number | null
+        }
+        Insert: {
+          birth_date: string
+          breed: string
+          created_at?: string
+          description?: string | null
+          father_id?: string | null
+          gender: string
+          health_records?: string | null
+          id?: string
+          image_urls?: string[] | null
+          mother_id?: string | null
+          name: string
+          price: number
+          status?: string
+          updated_at?: string
+          vaccinations?: string[] | null
+          video_urls?: string[] | null
+          weight?: number | null
+        }
+        Update: {
+          birth_date?: string
+          breed?: string
+          created_at?: string
+          description?: string | null
+          father_id?: string | null
+          gender?: string
+          health_records?: string | null
+          id?: string
+          image_urls?: string[] | null
+          mother_id?: string | null
+          name?: string
+          price?: number
+          status?: string
+          updated_at?: string
+          vaccinations?: string[] | null
+          video_urls?: string[] | null
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "puppies_father_id_fkey"
+            columns: ["father_id"]
+            isOneToOne: false
+            referencedRelation: "puppies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "puppies_mother_id_fkey"
+            columns: ["mother_id"]
+            isOneToOne: false
+            referencedRelation: "puppies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
