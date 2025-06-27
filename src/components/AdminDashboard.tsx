@@ -7,7 +7,18 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { PlusCircle, Eye, Edit, Trash2, Users, Heart, Mail, FileText } from 'lucide-react';
+import { PlusCircle, Trash2, Users, Heart, Mail, FileText, Pencil, AlertCircle } from 'lucide-react';
+import PuppyForm from './PuppyForm';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 interface Puppy {
   id: string;
@@ -18,6 +29,7 @@ interface Puppy {
   price: number;
   status: string;
   description: string;
+  image_url?: string;
 }
 
 interface Inquiry {
@@ -51,6 +63,9 @@ const AdminDashboard: React.FC = () => {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showPuppyForm, setShowPuppyForm] = useState(false);
+  const [selectedPuppy, setSelectedPuppy] = useState<Puppy | null>(null);
+  const [puppyToDelete, setPuppyToDelete] = useState<Puppy | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -97,22 +112,80 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const handleAddPuppy = () => {
+    setSelectedPuppy(null);
+    setShowPuppyForm(true);
+  };
+
+  const handleEditPuppy = (puppy: Puppy) => {
+    setSelectedPuppy(puppy);
+    setShowPuppyForm(true);
+  };
+
+  const handleDeleteClick = (puppy: Puppy) => {
+    setPuppyToDelete(puppy);
+  };
+
+  const confirmDeletePuppy = async () => {
+    if (!puppyToDelete?.id) return;
+    
+    try {
+      const { error } = await supabase
+        .from('puppies')
+        .delete()
+        .eq('id', puppyToDelete.id);
+
+      if (error) throw error;
+
+      setPuppies(prev => prev.filter(p => p.id !== puppyToDelete.id));
+      
+      toast({
+        title: "Success",
+        description: "Puppy deleted successfully!",
+      });
+    } catch (error) {
+      console.error('Error deleting puppy:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete puppy. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setPuppyToDelete(null);
+    }
+  };
+
+  const handlePuppyFormSuccess = () => {
+    setShowPuppyForm(false);
+    fetchData(); // Refresh the data
+  };
+
   const updatePuppyStatus = async (puppyId: string, newStatus: string) => {
     try {
+      // Optimistically update the UI
+      setPuppies(prev => prev.map(puppy => 
+        puppy.id === puppyId ? { ...puppy, status: newStatus } : puppy
+      ));
+
+      // Make the API call
       const { error } = await supabase
         .from('puppies')
         .update({ status: newStatus })
         .eq('id', puppyId);
 
-      if (error) throw error;
+      if (error) {
+        // Revert the optimistic update if there's an error
+        setPuppies(prev => prev.map(puppy => 
+          puppy.id === puppyId ? { ...puppy, status: puppy.status } : puppy
+        ));
+        throw error;
+      }
 
-      setPuppies(prev => prev.map(puppy => 
-        puppy.id === puppyId ? { ...puppy, status: newStatus } : puppy
-      ));
 
       toast({
         title: "Success",
         description: "Puppy status updated successfully!",
+        duration: 3000,
       });
     } catch (error) {
       console.error('Error updating puppy status:', error);
@@ -120,6 +193,7 @@ const AdminDashboard: React.FC = () => {
         title: "Error",
         description: "Failed to update puppy status.",
         variant: "destructive",
+        duration: 3000,
       });
     }
   };
@@ -200,7 +274,40 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <>
+      {showPuppyForm && (
+        <PuppyForm
+          puppy={selectedPuppy || undefined}
+          onSuccess={handlePuppyFormSuccess}
+          onCancel={() => setShowPuppyForm(false)}
+        />
+      )}
+
+      <AlertDialog open={!!puppyToDelete} onOpenChange={(open) => !open && setPuppyToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-red-500" />
+              <AlertDialogTitle>Delete Puppy</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="pt-4">
+              Are you sure you want to delete <span className="font-semibold">{puppyToDelete?.name}</span>? 
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={confirmDeletePuppy}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-amber-900">Admin Dashboard</h1>
         <div className="flex items-center gap-4">
@@ -267,7 +374,7 @@ const AdminDashboard: React.FC = () => {
             <CardHeader>
               <div className="flex justify-between items-center">
                 <CardTitle>Manage Puppies</CardTitle>
-                <Button>
+                <Button onClick={handleAddPuppy}>
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Add New Puppy
                 </Button>
@@ -312,6 +419,27 @@ const AdminDashboard: React.FC = () => {
                             disabled={puppy.status === 'sold'}
                           >
                             Sold
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditPuppy(puppy);
+                            }}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteClick(puppy);
+                            }}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
@@ -425,7 +553,8 @@ const AdminDashboard: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </>
   );
 };
 
