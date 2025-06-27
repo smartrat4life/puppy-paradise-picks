@@ -1,25 +1,16 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, X } from 'lucide-react';
+import { Loader2, X, Upload } from 'lucide-react';
+import { PuppyService, Puppy } from '@/services/puppyService';
 
 interface PuppyFormProps {
-  puppy?: {
-    id?: string;
-    name: string;
-    breed: string;
-    gender: string;
-    birth_date: string;
-    price: number;
-    status: string;
-    description: string;
-    image_url?: string;
-  };
+  puppy?: Puppy;
   onSuccess: () => void;
   onCancel: () => void;
 }
@@ -30,21 +21,22 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
     breed: puppy?.breed || '',
     gender: puppy?.gender || 'male',
     birth_date: puppy?.birth_date || '',
-    price: puppy?.price || '',
+    price: puppy?.price?.toString() || '',
     status: puppy?.status || 'available',
     description: puppy?.description || '',
-    image: null as File | null,
   });
   
-  const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(puppy?.image_url || '');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'price' ? parseFloat(value) || '' : value,
+      [name]: value,
     }));
   };
 
@@ -58,12 +50,30 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setFormData(prev => ({
-        ...prev,
-        image: file,
-      }));
       
-      // Create image preview
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please select an image file",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please select an image smaller than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      setImageFile(file);
+      
+      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -72,82 +82,106 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
     }
   };
 
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Name is required",
+        variant: "destructive",
+      });
+      return false;
+    }
+    
+    if (!formData.breed.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Breed is required",
+        variant: "destructive",
+      });
+      return false;
+    }
+    
+    if (!formData.birth_date) {
+      toast({
+        title: "Validation Error",
+        description: "Birth date is required",
+        variant: "destructive",
+      });
+      return false;
+    }
+    
+    if (!formData.price || parseFloat(formData.price) <= 0) {
+      toast({
+        title: "Validation Error",
+        description: "Valid price is required",
+        variant: "destructive",
+      });
+      return false;
+    }
+    
+    if (!formData.description.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Description is required",
+        variant: "destructive",
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     setIsLoading(true);
 
     try {
       let imageUrl = puppy?.image_url || '';
       
       // Upload new image if selected
-      if (formData.image) {
-        const fileExt = formData.image.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `puppies/${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('puppy-images')
-          .upload(filePath, formData.image);
-
-        if (uploadError) throw uploadError;
-
-        // Get the public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('puppy-images')
-          .getPublicUrl(filePath);
-
-        imageUrl = publicUrl;
+      if (imageFile) {
+        setIsUploading(true);
+        imageUrl = await PuppyService.uploadImage(imageFile);
+        setIsUploading(false);
       }
 
       // Prepare puppy data
       const puppyData = {
-        name: formData.name,
-        breed: formData.breed,
-        gender: formData.gender,
+        name: formData.name.trim(),
+        breed: formData.breed.trim(),
+        gender: formData.gender as 'male' | 'female',
         birth_date: formData.birth_date,
-        price: parseFloat(formData.price as any) || 0,
+        price: parseFloat(formData.price),
         status: formData.status,
-        description: formData.description,
+        description: formData.description.trim(),
         image_url: imageUrl,
       };
 
       // Update or create puppy
       if (puppy?.id) {
-        const { error } = await supabase
-          .from('puppies')
-          .update(puppyData)
-          .eq('id', puppy.id);
-
-        if (error) throw error;
-        
-        toast({
-          title: "Success",
-          description: "Puppy updated successfully!",
-        });
+        await PuppyService.updatePuppy(puppy.id, puppyData);
       } else {
-        const { error } = await supabase
-          .from('puppies')
-          .insert([puppyData]);
-
-        if (error) throw error;
-        
-        toast({
-          title: "Success",
-          description: "Puppy added successfully!",
-        });
+        await PuppyService.createPuppy(puppyData);
       }
 
       onSuccess();
     } catch (error) {
       console.error('Error saving puppy:', error);
-      toast({
-        title: "Error",
-        description: "Failed to save puppy. Please try again.",
-        variant: "destructive",
-      });
+      // Error handling is done in the service layer
     } finally {
       setIsLoading(false);
+      setIsUploading(false);
     }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview('');
   };
 
   return (
@@ -160,6 +194,7 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
           <button 
             onClick={onCancel}
             className="text-gray-500 hover:text-gray-700"
+            disabled={isLoading}
           >
             <X className="h-5 w-5" />
           </button>
@@ -175,6 +210,7 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
                 value={formData.name}
                 onChange={handleChange}
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -186,6 +222,7 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
                 value={formData.breed}
                 onChange={handleChange}
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -194,6 +231,7 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
               <Select
                 value={formData.gender}
                 onValueChange={(value) => handleSelectChange('gender', value)}
+                disabled={isLoading}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select gender" />
@@ -214,6 +252,7 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
                 value={formData.birth_date}
                 onChange={handleChange}
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -228,6 +267,7 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
                 value={formData.price}
                 onChange={handleChange}
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -236,6 +276,7 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
               <Select
                 value={formData.status}
                 onValueChange={(value) => handleSelectChange('status', value)}
+                disabled={isLoading}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select status" />
@@ -257,6 +298,7 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
                 onChange={handleChange}
                 rows={4}
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -272,26 +314,35 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
                     />
                     <button
                       type="button"
-                      onClick={() => {
-                        setImagePreview('');
-                        setFormData(prev => ({ ...prev, image: null }));
-                      }}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                      onClick={removeImage}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                      disabled={isLoading}
                     >
                       <X className="h-3 w-3" />
                     </button>
                   </div>
                 ) : (
-                  <div className="border-2 border-dashed border-gray-300 rounded-md p-4 text-center">
+                  <div className="border-2 border-dashed border-gray-300 rounded-md p-8 text-center">
+                    <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
                     <p className="text-sm text-gray-500">No image selected</p>
                   </div>
                 )}
                 <div>
                   <Label 
                     htmlFor="image-upload" 
-                    className="cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md text-sm font-medium"
+                    className="cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md text-sm font-medium inline-flex items-center gap-2"
                   >
-                    {imagePreview ? 'Change Image' : 'Upload Image'}
+                    {isUploading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4" />
+                        {imagePreview ? 'Change Image' : 'Upload Image'}
+                      </>
+                    )}
                   </Label>
                   <Input
                     id="image-upload"
@@ -300,6 +351,7 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
                     accept="image/*"
                     onChange={handleImageChange}
                     className="hidden"
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -315,11 +367,11 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading || isUploading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {puppy?.id ? 'Updating...' : 'Adding...'}
                 </>
               ) : puppy?.id ? 'Update Puppy' : 'Add Puppy'}
             </Button>

@@ -212,6 +212,7 @@ export type Database = {
           gender: string
           health_records: string | null
           id: string
+          image_url: string | null
           image_urls: string[] | null
           mother_id: string | null
           name: string
@@ -231,6 +232,7 @@ export type Database = {
           gender: string
           health_records?: string | null
           id?: string
+          image_url?: string | null
           image_urls?: string[] | null
           mother_id?: string | null
           name: string
@@ -250,6 +252,7 @@ export type Database = {
           gender?: string
           health_records?: string | null
           id?: string
+          image_url?: string | null
           image_urls?: string[] | null
           mother_id?: string | null
           name?: string
