@@ -167,9 +167,10 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const loading = puppiesLoading || inquiriesLoading || applicationsLoading;
+  // Fixed loading condition - only show loading if initial data is still loading
+  const isInitialLoading = puppiesLoading && inquiriesLoading && applicationsLoading;
 
-  if (loading) {
+  if (isInitialLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
