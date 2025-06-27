@@ -32,15 +32,6 @@ const Hero = () => {
       </div>
 
       <div className="container mx-auto px-6 text-center relative z-10">
-        {/* Logo */}
-        <div className="mb-8 animate-fade-in">
-          <img 
-            src="/lovable-uploads/bd88e703-c689-4c38-8f0f-1048f3b8da46.png" 
-            alt="Pick a Puppy Logo" 
-            className="mx-auto w-48 h-48 object-contain hover:scale-105 transition-transform duration-300 drop-shadow-2xl"
-          />
-        </div>
-
         {/* Main heading */}
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in delay-200 drop-shadow-2xl">
           Find Your Perfect
