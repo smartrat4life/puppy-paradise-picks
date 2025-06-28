@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 
@@ -70,24 +69,44 @@ export class PuppyService {
   }
 
   static async uploadImage(file: File): Promise<string> {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-    const filePath = `puppies/${fileName}`;
+    try {
+      console.log('Starting image upload...', { fileName: file.name, size: file.size, type: file.type });
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `puppies/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from('puppy-images')
-      .upload(filePath, file);
+      console.log('Uploading to path:', filePath);
+      
+      // Add a timeout to prevent hanging
+      const uploadPromise = supabase.storage
+        .from('puppy-images')
+        .upload(filePath, file);
 
-    if (uploadError) {
-      console.error('Error uploading image:', uploadError);
-      throw new Error('Failed to upload image');
+      // Add a 30-second timeout
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Upload timed out after 30 seconds')), 30000)
+      );
+
+      const { error: uploadError } = await Promise.race([uploadPromise, timeoutPromise]) as any;
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw new Error(`Failed to upload image: ${uploadError.message}`);
+      }
+
+      console.log('Upload successful, getting public URL...');
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('puppy-images')
+        .getPublicUrl(filePath);
+
+      console.log('Got public URL:', publicUrl);
+      return publicUrl;
+    } catch (error) {
+      console.error('Error in uploadImage:', error);
+      throw error; // Re-throw to be caught by the caller
     }
-
-    const { data: { publicUrl } } = supabase.storage
-      .from('puppy-images')
-      .getPublicUrl(filePath);
-
-    return publicUrl;
   }
 
   static async deleteImage(imageUrl: string): Promise<void> {

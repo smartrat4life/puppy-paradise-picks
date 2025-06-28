@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -145,9 +144,25 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
       
       // Upload new image if selected
       if (imageFile) {
-        setIsUploading(true);
-        imageUrl = await PuppyService.uploadImage(imageFile);
-        setIsUploading(false);
+        try {
+          setIsUploading(true);
+          console.log('Starting image upload...');
+          imageUrl = await PuppyService.uploadImage(imageFile);
+          console.log('Image upload successful, URL:', imageUrl);
+        } catch (error) {
+          console.error('Image upload failed:', error);
+          toast({
+            title: "Upload Error",
+            description: error instanceof Error ? error.message : "Failed to upload image",
+            variant: "destructive",
+          });
+          // Reset both loading states on upload error
+          setIsLoading(false);
+          setIsUploading(false);
+          return; // Stop if image upload fails
+        } finally {
+          setIsUploading(false);
+        }
       }
 
       // Prepare puppy data
@@ -162,17 +177,31 @@ const PuppyForm: React.FC<PuppyFormProps> = ({ puppy, onSuccess, onCancel }) => 
         image_url: imageUrl,
       };
 
+      console.log('Creating/updating puppy with data:', puppyData);
+      
       // Update or create puppy
       if (puppy?.id) {
         await PuppyService.updatePuppy(puppy.id, puppyData);
+        toast({
+          title: "Success",
+          description: "Puppy updated successfully!",
+        });
       } else {
         await PuppyService.createPuppy(puppyData);
+        toast({
+          title: "Success",
+          description: "Puppy added successfully!",
+        });
       }
 
       onSuccess();
     } catch (error) {
       console.error('Error saving puppy:', error);
-      // Error handling is done in the service layer
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to save puppy",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
       setIsUploading(false);
