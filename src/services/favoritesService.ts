@@ -1,5 +1,4 @@
 
-
 import { supabase } from '@/integrations/supabase/client';
 
 // Manual type definitions for favorites until Supabase types are regenerated
@@ -79,4 +78,3 @@ export class FavoritesService {
     return !!data;
   }
 }
-

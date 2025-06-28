@@ -19,8 +19,13 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
   useEffect(() => {
     const checkFavoriteStatus = async () => {
       if (user) {
-        const favoriteStatus = await isFavorite(puppyId);
-        setIsFavorited(favoriteStatus);
+        try {
+          const favoriteStatus = await isFavorite(puppyId);
+          setIsFavorited(favoriteStatus);
+        } catch (error) {
+          console.error('Error checking favorite status:', error);
+          setIsFavorited(false);
+        }
       }
     };
     checkFavoriteStatus();
@@ -30,7 +35,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
     e.preventDefault();
     e.stopPropagation();
     
-    if (!user) {
+    if (!user || loading) {
       return;
     }
 
@@ -43,6 +48,8 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
         await addToFavorites(puppyId);
         setIsFavorited(true);
       }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
     } finally {
       setLoading(false);
     }
