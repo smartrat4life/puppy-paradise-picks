@@ -8,16 +8,21 @@ export type PuppyUpdate = Database['public']['Tables']['puppies']['Update'];
 
 export class PuppyService {
   static async getAllPuppies(): Promise<Puppy[]> {
+    console.log('PuppyService.getAllPuppies called');
+    
     const { data, error } = await supabase
       .from('puppies')
       .select('*')
       .order('created_at', { ascending: false });
+
+    console.log('Supabase response:', { data, error });
 
     if (error) {
       console.error('Error fetching puppies:', error);
       throw new Error('Failed to fetch puppies');
     }
 
+    console.log('Returning puppies data:', data);
     return data || [];
   }
 

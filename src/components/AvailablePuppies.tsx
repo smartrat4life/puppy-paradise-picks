@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Heart, MapPin, Calendar, Shield, Award, CheckCircle, Play } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { usePuppies } from '@/hooks/usePuppies';
 import FavoriteButton from './FavoriteButton';
 
@@ -14,7 +15,9 @@ const AvailablePuppies = () => {
   const [ageFilter, setAgeFilter] = useState('all');
   const [availabilityFilter, setAvailabilityFilter] = useState('all');
   
-  const { puppies, loading } = usePuppies();
+  const { puppies, loading, error } = usePuppies();
+
+  console.log('AvailablePuppies render:', { puppies, loading, error });
 
   const calculateAge = (birthDate: string) => {
     const birth = new Date(birthDate);
@@ -48,8 +51,48 @@ const AvailablePuppies = () => {
     return (
       <section id="available-puppies" className="py-20 bg-white">
         <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-amber-900 mb-6">
+              Available Puppies
+            </h2>
+            <p className="text-xl text-amber-700 max-w-3xl mx-auto">
+              Loading our adorable puppies...
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="overflow-hidden">
+                <Skeleton className="w-full h-64" />
+                <CardContent className="p-6">
+                  <Skeleton className="h-6 w-3/4 mb-2" />
+                  <Skeleton className="h-4 w-1/2 mb-4" />
+                  <Skeleton className="h-4 w-full mb-2" />
+                  <Skeleton className="h-4 w-2/3 mb-4" />
+                  <Skeleton className="h-10 w-full" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="available-puppies" className="py-20 bg-white">
+        <div className="container mx-auto px-6">
           <div className="text-center">
-            <div className="text-xl">Loading available puppies...</div>
+            <h2 className="text-4xl md:text-5xl font-bold text-amber-900 mb-6">
+              Available Puppies
+            </h2>
+            <div className="text-xl text-red-600 mb-4">
+              Error loading puppies: {error}
+            </div>
+            <Button onClick={() => window.location.reload()} className="bg-teal-600 hover:bg-teal-700">
+              Retry
+            </Button>
           </div>
         </div>
       </section>

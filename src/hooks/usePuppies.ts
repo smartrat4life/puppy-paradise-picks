@@ -11,11 +11,14 @@ export const usePuppies = () => {
 
   const fetchPuppies = async () => {
     try {
+      console.log('Starting to fetch puppies...');
       setLoading(true);
       setError(null);
       const data = await PuppyService.getAllPuppies();
+      console.log('Fetched puppies data:', data);
       setPuppies(data);
     } catch (err) {
+      console.error('Error fetching puppies:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch puppies';
       setError(errorMessage);
       toast({
@@ -24,6 +27,7 @@ export const usePuppies = () => {
         variant: "destructive",
       });
     } finally {
+      console.log('Setting loading to false');
       setLoading(false);
     }
   };
@@ -113,6 +117,7 @@ export const usePuppies = () => {
   };
 
   useEffect(() => {
+    console.log('usePuppies useEffect triggered');
     fetchPuppies();
   }, []);
 
