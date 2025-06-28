@@ -4,149 +4,38 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Heart, MapPin, Calendar, Shield, Award, CheckCircle, Play, Camera } from 'lucide-react';
+import { Heart, MapPin, Calendar, Shield, Award, CheckCircle, Play } from 'lucide-react';
+import { usePuppies } from '@/hooks/usePuppies';
+import FavoriteButton from './FavoriteButton';
 
 const AvailablePuppies = () => {
   const [breedFilter, setBreedFilter] = useState('all');
   const [genderFilter, setGenderFilter] = useState('all');
   const [ageFilter, setAgeFilter] = useState('all');
   const [availabilityFilter, setAvailabilityFilter] = useState('all');
+  
+  const { puppies, loading } = usePuppies();
 
-  const availablePuppies = [
-    {
-      id: 1,
-      name: "Bella",
-      breed: "Golden Doodle",
-      age: "8 weeks",
-      gender: "Female",
-      price: "$1,200",
-      deposit: "$300",
-      image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80",
-      parentImages: [
-        "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400&q=80",
-        "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80"
-      ],
-      description: "Sweet and playful Golden Doodle ready for her forever home.",
-      available: true,
-      vetChecked: true,
-      akcRegistered: true,
-      healthGuaranteed: true,
-      videoUrl: "#"
-    },
-    {
-      id: 2,
-      name: "Max",
-      breed: "ShihTzu",
-      age: "10 weeks",
-      gender: "Male",
-      price: "$900",
-      deposit: "$250",
-      image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800&q=80",
-      parentImages: [
-        "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80",
-        "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80"
-      ],
-      description: "Adorable ShihTzu with a gentle temperament and beautiful coat.",
-      available: true,
-      vetChecked: true,
-      akcRegistered: true,
-      healthGuaranteed: true,
-      videoUrl: "#"
-    },
-    {
-      id: 3,
-      name: "Luna",
-      breed: "Cavapoo",
-      age: "9 weeks",
-      gender: "Female",
-      price: "$1,100",
-      deposit: "$275",
-      image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80",
-      parentImages: [
-        "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400&q=80",
-        "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80"
-      ],
-      description: "Hypoallergenic Cavapoo perfect for families with allergies.",
-      available: true,
-      vetChecked: true,
-      akcRegistered: true,
-      healthGuaranteed: true,
-      videoUrl: "#"
-    },
-    {
-      id: 4,
-      name: "Rocky",
-      breed: "Dachshund",
-      age: "7 weeks",
-      gender: "Male",
-      price: "$800",
-      deposit: "$200",
-      image: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=800&q=80",
-      parentImages: [
-        "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80",
-        "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400&q=80"
-      ],
-      description: "Energetic Dachshund with a bold personality and loving nature.",
-      available: false,
-      vetChecked: true,
-      akcRegistered: true,
-      healthGuaranteed: true,
-      videoUrl: "#"
-    },
-    {
-      id: 5,
-      name: "Milo",
-      breed: "Chihuahua",
-      age: "12 weeks",
-      gender: "Male",
-      price: "$700",
-      deposit: "$175",
-      image: "https://images.unsplash.com/photo-1444212477490-ca407925329e?w=800&q=80",
-      parentImages: [
-        "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80",
-        "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80"
-      ],
-      description: "Tiny but mighty Chihuahua with a big personality.",
-      available: true,
-      vetChecked: true,
-      akcRegistered: true,
-      healthGuaranteed: true,
-      videoUrl: "#"
-    },
-    {
-      id: 6,
-      name: "Zeus",
-      breed: "Doberman",
-      age: "8 weeks",
-      gender: "Male",
-      price: "$1,500",
-      deposit: "$400",
-      image: "https://images.unsplash.com/photo-1551717743-49959800b1f6?w=800&q=80",
-      parentImages: [
-        "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400&q=80",
-        "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80"
-      ],
-      description: "Strong and loyal Doberman with excellent bloodlines.",
-      available: true,
-      vetChecked: true,
-      akcRegistered: true,
-      healthGuaranteed: true,
-      videoUrl: "#"
-    }
-  ];
+  const calculateAge = (birthDate: string) => {
+    const birth = new Date(birthDate);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - birth.getTime());
+    const diffWeeks = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 7));
+    return `${diffWeeks} weeks`;
+  };
 
-  const filteredPuppies = availablePuppies.filter(puppy => {
+  const filteredPuppies = puppies.filter(puppy => {
     if (breedFilter !== 'all' && puppy.breed !== breedFilter) return false;
-    if (genderFilter !== 'all' && puppy.gender !== genderFilter) return false;
+    if (genderFilter !== 'all' && puppy.gender.toLowerCase() !== genderFilter) return false;
     if (ageFilter !== 'all') {
-      const weeks = parseInt(puppy.age);
+      const weeks = parseInt(calculateAge(puppy.birth_date));
       if (ageFilter === '6-8' && (weeks < 6 || weeks > 8)) return false;
       if (ageFilter === '9-12' && (weeks < 9 || weeks > 12)) return false;
       if (ageFilter === '13+' && weeks < 13) return false;
     }
     if (availabilityFilter !== 'all') {
-      if (availabilityFilter === 'available' && !puppy.available) return false;
-      if (availabilityFilter === 'reserved' && puppy.available) return false;
+      if (availabilityFilter === 'available' && puppy.status !== 'available') return false;
+      if (availabilityFilter === 'reserved' && puppy.status === 'available') return false;
     }
     return true;
   });
@@ -154,6 +43,18 @@ const AvailablePuppies = () => {
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  if (loading) {
+    return (
+      <section id="available-puppies" className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center">
+            <div className="text-xl">Loading available puppies...</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="available-puppies" className="py-20 bg-white">
@@ -218,8 +119,8 @@ const AvailablePuppies = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Genders</SelectItem>
-                  <SelectItem value="Male">Male</SelectItem>
-                  <SelectItem value="Female">Female</SelectItem>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -260,28 +161,22 @@ const AvailablePuppies = () => {
             <Card key={puppy.id} className="group overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-teal-300">
               <div className="relative overflow-hidden">
                 <img 
-                  src={puppy.image} 
+                  src={puppy.image_url || 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80'} 
                   alt={puppy.name}
                   className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute top-4 right-4 flex flex-col gap-2">
-                  <Badge className={puppy.available ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"}>
-                    {puppy.available ? "Available" : "Reserved"}
+                  <Badge className={puppy.status === 'available' ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"}>
+                    {puppy.status === 'available' ? "Available" : "Reserved"}
                   </Badge>
-                  {puppy.videoUrl && (
-                    <Badge variant="secondary" className="bg-purple-100 text-purple-700 cursor-pointer hover:bg-purple-200">
-                      <Play className="w-3 h-3 mr-1" />
-                      Video
-                    </Badge>
-                  )}
                 </div>
                 <div className="absolute top-4 left-4 flex flex-col gap-1">
                   <Badge variant="secondary" className="bg-white/90 text-amber-800">
-                    {puppy.price}
+                    ${puppy.price}
                   </Badge>
-                  <Badge variant="secondary" className="bg-teal-100 text-teal-700 text-xs">
-                    Deposit: {puppy.deposit}
-                  </Badge>
+                </div>
+                <div className="absolute bottom-4 right-4">
+                  <FavoriteButton puppyId={puppy.id} />
                 </div>
               </div>
               
@@ -290,7 +185,6 @@ const AvailablePuppies = () => {
                   <h3 className="text-2xl font-bold text-amber-900 group-hover:text-teal-700 transition-colors duration-300">
                     {puppy.name}
                   </h3>
-                  <Heart className="w-6 h-6 text-red-400 group-hover:text-red-500 transition-colors duration-300" />
                 </div>
                 
                 <p className="text-lg font-semibold text-teal-600 mb-2">{puppy.breed}</p>
@@ -298,7 +192,7 @@ const AvailablePuppies = () => {
                 <div className="flex items-center gap-4 mb-3 text-sm text-amber-700">
                   <div className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
-                    {puppy.age}
+                    {calculateAge(puppy.birth_date)}
                   </div>
                   <div className="flex items-center gap-1">
                     <MapPin className="w-4 h-4" />
@@ -308,54 +202,33 @@ const AvailablePuppies = () => {
 
                 {/* Trust badges for each puppy */}
                 <div className="flex gap-2 mb-3 flex-wrap">
-                  {puppy.vetChecked && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs">
-                      <Shield className="w-3 h-3 mr-1" />
-                      Vet-Checked
-                    </Badge>
-                  )}
-                  {puppy.healthGuaranteed && (
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs">
-                      <Heart className="w-3 h-3 mr-1" />
-                      Health Guaranteed
-                    </Badge>
-                  )}
-                  {puppy.akcRegistered && (
-                    <Badge variant="secondary" className="bg-purple-100 text-purple-700 text-xs">
-                      <Award className="w-3 h-3 mr-1" />
-                      AKC
-                    </Badge>
-                  )}
+                  <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs">
+                    <Shield className="w-3 h-3 mr-1" />
+                    Vet-Checked
+                  </Badge>
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs">
+                    <Heart className="w-3 h-3 mr-1" />
+                    Health Guaranteed
+                  </Badge>
+                  <Badge variant="secondary" className="bg-purple-100 text-purple-700 text-xs">
+                    <Award className="w-3 h-3 mr-1" />
+                    AKC
+                  </Badge>
                 </div>
                 
                 <p className="text-amber-700 mb-4 leading-relaxed text-sm">
                   {puppy.description}
                 </p>
-
-                {/* Parent Images */}
-                <div className="mb-4">
-                  <p className="text-sm font-medium text-amber-700 mb-2">Parents:</p>
-                  <div className="flex gap-2">
-                    {puppy.parentImages.map((parentImg, index) => (
-                      <img 
-                        key={index}
-                        src={parentImg} 
-                        alt={`Parent ${index + 1}`}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-teal-200"
-                      />
-                    ))}
-                  </div>
-                </div>
                 
                 <Button 
-                  className={`w-full ${puppy.available 
+                  className={`w-full ${puppy.status === 'available' 
                     ? 'bg-teal-600 hover:bg-teal-700' 
                     : 'bg-gray-400 cursor-not-allowed'} 
                     text-white transition-all duration-300`}
-                  onClick={puppy.available ? scrollToContact : undefined}
-                  disabled={!puppy.available}
+                  onClick={puppy.status === 'available' ? scrollToContact : undefined}
+                  disabled={puppy.status !== 'available'}
                 >
-                  {puppy.available ? 'Inquire Now' : 'Reserved'}
+                  {puppy.status === 'available' ? 'Inquire Now' : 'Reserved'}
                 </Button>
               </CardContent>
             </Card>
