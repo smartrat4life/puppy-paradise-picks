@@ -1,9 +1,19 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { Database } from '@/integrations/supabase/types';
 
-export type Favorite = Database['public']['Tables']['favorites']['Row'];
-export type FavoriteInsert = Database['public']['Tables']['favorites']['Insert'];
+// Manual type definitions for favorites until Supabase types are regenerated
+export type Favorite = {
+  id: string;
+  user_id: string;
+  puppy_id: string;
+  created_at: string;
+  puppies?: any; // Will be populated with puppy data when joined
+};
+
+export type FavoriteInsert = {
+  user_id: string;
+  puppy_id: string;
+};
 
 export class FavoritesService {
   static async getUserFavorites(userId: string): Promise<Favorite[]> {
