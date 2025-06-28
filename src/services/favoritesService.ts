@@ -1,4 +1,5 @@
 
+
 import { supabase } from '@/integrations/supabase/client';
 
 // Manual type definitions for favorites until Supabase types are regenerated
@@ -17,7 +18,7 @@ export type FavoriteInsert = {
 
 export class FavoritesService {
   static async getUserFavorites(userId: string): Promise<Favorite[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('favorites')
       .select(`
         *,
@@ -35,7 +36,7 @@ export class FavoritesService {
   }
 
   static async addToFavorites(userId: string, puppyId: string): Promise<Favorite> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('favorites')
       .insert([{ user_id: userId, puppy_id: puppyId }])
       .select()
@@ -50,7 +51,7 @@ export class FavoritesService {
   }
 
   static async removeFromFavorites(userId: string, puppyId: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('favorites')
       .delete()
       .eq('user_id', userId)
@@ -63,7 +64,7 @@ export class FavoritesService {
   }
 
   static async isFavorite(userId: string, puppyId: string): Promise<boolean> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('favorites')
       .select('id')
       .eq('user_id', userId)
@@ -78,3 +79,4 @@ export class FavoritesService {
     return !!data;
   }
 }
+
