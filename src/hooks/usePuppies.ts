@@ -1,9 +1,9 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { PuppyService, Puppy } from '@/services/puppyService';
 import { useToast } from '@/hooks/use-toast';
-import { testSupabaseConnection, testBasicConnectivity } from '@/integrations/supabase/client';
 
-type ConnectionStatus = 'idle' | 'checking' | 'connected' | 'disconnected' | 'error' | 'cors_error';
+type ConnectionStatus = 'idle' | 'loading' | 'connected' | 'error';
 
 export const usePuppies = () => {
   const [puppies, setPuppies] = useState<Puppy[]>([]);
@@ -17,77 +17,18 @@ export const usePuppies = () => {
       title,
       description: message,
       variant: 'destructive',
-      duration: 10000, // Show for 10 seconds
+      duration: 10000,
     });
   }, [toast]);
-
-  const testConnection = useCallback(async (): Promise<boolean> => {
-    console.log('Starting connection test...');
-    setConnectionStatus('checking');
-    
-    try {
-      // First test basic connectivity
-      console.log('Testing basic connectivity...');
-      await testBasicConnectivity();
-      
-      // Then test the full connection
-      const result = await testSupabaseConnection();
-      
-      if (result.success) {
-        console.log('Connection test successful');
-        setConnectionStatus('connected');
-        return true;
-      } else {
-        console.warn('Connection test failed:', result.error);
-        
-        // Handle CORS errors specifically
-        if (result.message.includes('CORS') || result.error?.includes('CORS')) {
-          setConnectionStatus('cors_error');
-          showErrorToast(
-            'CORS Error', 
-            'Please check your Supabase CORS settings. Make sure to add your local development URL (http://localhost:8083) to the CORS settings in your Supabase dashboard.'
-          );
-        } else {
-          setConnectionStatus('error');
-          showErrorToast('Connection Error', result.message);
-        }
-        
-        return false;
-      }
-    } catch (err) {
-      console.error('Connection test threw an error:', err);
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      
-      if (errorMessage.includes('CORS') || errorMessage.includes('blocked by CORS policy')) {
-        setConnectionStatus('cors_error');
-        showErrorToast(
-          'CORS Error', 
-          'Please check your Supabase CORS settings. Make sure to add your local development URL (http://localhost:8083) to the CORS settings in your Supabase dashboard.'
-        );
-      } else {
-        setConnectionStatus('error');
-        showErrorToast('Connection Error', errorMessage);
-      }
-      
-      return false;
-    }
-  }, [showErrorToast]);
 
   const fetchPuppies = useCallback(async () => {
     console.log('Starting to fetch puppies...');
     setLoading(true);
     setError(null);
+    setConnectionStatus('loading');
     
     try {
-      // First test the connection
-      const isConnected = await testConnection();
-      if (!isConnected) {
-        console.warn('Skipping puppy fetch due to connection issues');
-        setPuppies([]);
-        return;
-      }
-      
-      console.log('Connection verified, fetching puppies...');
+      console.log('Fetching puppies directly from PuppyService...');
       const data = await PuppyService.getAllPuppies();
       
       if (!data) {
@@ -102,21 +43,13 @@ export const usePuppies = () => {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch puppies';
       setError(errorMessage);
       setPuppies([]);
+      setConnectionStatus('error');
       
-      if (errorMessage.includes('CORS') || errorMessage.includes('blocked by CORS policy')) {
-        setConnectionStatus('cors_error');
-        showErrorToast(
-          'CORS Error', 
-          'Please check your Supabase CORS settings. Make sure to add your local development URL (http://localhost:8083) to the CORS settings in your Supabase dashboard.'
-        );
-      } else {
-        setConnectionStatus('error');
-        showErrorToast('Error', errorMessage);
-      }
+      showErrorToast('Error', errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [testConnection, showErrorToast]);
+  }, [showErrorToast]);
 
   const createPuppy = useCallback(async (puppyData: Parameters<typeof PuppyService.createPuppy>[0]) => {
     try {
@@ -174,13 +107,7 @@ export const usePuppies = () => {
 
   const deletePuppy = useCallback(async (id: string) => {
     try {
-      // Find the puppy to get its image URL for cleanup
-      const puppyToDelete = puppies.find(p => p.id === id);
-      
-      // Delete the puppy
       await PuppyService.deletePuppy(id);
-      
-      // Update the local state
       setPuppies(prev => prev.filter(puppy => puppy.id !== id));
       
       toast({
@@ -202,7 +129,7 @@ export const usePuppies = () => {
       
       throw err;
     }
-  }, [puppies, toast]);
+  }, [toast]);
 
   const uploadImage = useCallback(async (file: File): Promise<string> => {
     try {
@@ -236,6 +163,5 @@ export const usePuppies = () => {
     updatePuppy,
     deletePuppy,
     uploadImage,
-    testConnection,
   };
 };
