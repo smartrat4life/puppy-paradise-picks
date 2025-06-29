@@ -95,24 +95,10 @@ const Hero = () => {
           <Button 
             variant="outline" 
             size="lg" 
-            className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-amber-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+            className="w-full sm:w-auto border-2 border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105"
             onClick={() => scrollToSection('breeds')}
           >
             Explore Our Breeds
-          </Button>
-        </div>
-
-        {/* Video Call to Action */}
-        <div className="mt-8 animate-fade-in delay-800">
-          <p className="text-white/80 text-sm mb-4">
-            📹 Watch our puppies playing, eating, and being loved!
-          </p>
-          <Button 
-            variant="ghost" 
-            className="text-white/90 hover:text-white hover:bg-white/20 transition-all duration-300"
-            onClick={() => scrollToSection('available-puppies')}
-          >
-            View Puppy Videos →
           </Button>
         </div>
       </div>

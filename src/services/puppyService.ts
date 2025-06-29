@@ -5,127 +5,148 @@ export type Puppy = Database['public']['Tables']['puppies']['Row'];
 export type PuppyInsert = Database['public']['Tables']['puppies']['Insert'];
 export type PuppyUpdate = Database['public']['Tables']['puppies']['Update'];
 
+const handleSupabaseError = (operation: string, error: any) => {
+  console.error(`Supabase error during ${operation}:`, {
+    message: error.message,
+    details: error.details,
+    hint: error.hint,
+    code: error.code,
+    status: error.status
+  });
+  throw new Error(`Failed to ${operation}: ${error.message}`);
+};
+
 export class PuppyService {
   static async getAllPuppies(): Promise<Puppy[]> {
     console.log('PuppyService.getAllPuppies called');
     
-    const { data, error } = await supabase
-      .from('puppies')
-      .select('*')
-      .order('created_at', { ascending: false });
+    try {
+      console.log('Creating Supabase query...');
+      const { data, error, status } = await supabase
+        .from('puppies')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    console.log('Supabase response:', { data, error });
+      if (error) {
+        handleSupabaseError('fetch puppies', error);
+      }
 
-    if (error) {
-      console.error('Error fetching puppies:', error);
-      throw new Error('Failed to fetch puppies');
+      console.log(`Successfully fetched ${data?.length || 0} puppies`);
+      return data || [];
+    } catch (error) {
+      console.error('Unexpected error in getAllPuppies:', error);
+      throw error;
     }
-
-    console.log('Returning puppies data:', data);
-    return data || [];
   }
 
   static async createPuppy(puppy: PuppyInsert): Promise<Puppy> {
-    const { data, error } = await supabase
-      .from('puppies')
-      .insert([puppy])
-      .select()
-      .single();
+    console.log('Creating new puppy:', puppy);
+    try {
+      const { data, error } = await supabase
+        .from('puppies')
+        .insert([puppy])
+        .select()
+        .single();
 
-    if (error) {
-      console.error('Error creating puppy:', error);
-      throw new Error('Failed to create puppy');
+      if (error) {
+        handleSupabaseError('create puppy', error);
+      }
+
+      console.log('Successfully created puppy:', data);
+      return data!;
+    } catch (error) {
+      console.error('Error in createPuppy:', error);
+      throw error;
     }
-
-    return data;
   }
 
   static async updatePuppy(id: string, updates: PuppyUpdate): Promise<Puppy> {
-    const { data, error } = await supabase
-      .from('puppies')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single();
+    console.log(`Updating puppy ${id}:`, updates);
+    try {
+      const { data, error } = await supabase
+        .from('puppies')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
 
-    if (error) {
-      console.error('Error updating puppy:', error);
-      throw new Error('Failed to update puppy');
+      if (error) {
+        handleSupabaseError('update puppy', error);
+      }
+
+      console.log('Successfully updated puppy:', data);
+      return data!;
+    } catch (error) {
+      console.error(`Error updating puppy ${id}:`, error);
+      throw error;
     }
-
-    return data;
   }
 
   static async deletePuppy(id: string): Promise<void> {
-    const { error } = await supabase
-      .from('puppies')
-      .delete()
-      .eq('id', id);
+    console.log(`Deleting puppy ${id}`);
+    try {
+      const { error } = await supabase
+        .from('puppies')
+        .delete()
+        .eq('id', id);
 
-    if (error) {
-      console.error('Error deleting puppy:', error);
-      throw new Error('Failed to delete puppy');
+      if (error) {
+        handleSupabaseError('delete puppy', error);
+      }
+
+      console.log(`Successfully deleted puppy ${id}`);
+    } catch (error) {
+      console.error(`Error deleting puppy ${id}:`, error);
+      throw error;
     }
   }
 
   static async uploadImage(file: File): Promise<string> {
+    console.log('Uploading image:', file.name);
     try {
-      console.log('Starting image upload...', { fileName: file.name, size: file.size, type: file.type });
-      
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
       const filePath = `puppies/${fileName}`;
 
-      console.log('Uploading to path:', filePath);
-      
-      // Add a timeout to prevent hanging
-      const uploadPromise = supabase.storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('puppy-images')
         .upload(filePath, file);
 
-      // Add a 30-second timeout
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Upload timed out after 30 seconds')), 30000)
-      );
-
-      const { error: uploadError } = await Promise.race([uploadPromise, timeoutPromise]) as any;
-
       if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw new Error(`Failed to upload image: ${uploadError.message}`);
+        handleSupabaseError('upload image', uploadError);
       }
 
-      console.log('Upload successful, getting public URL...');
-      
       const { data: { publicUrl } } = supabase.storage
         .from('puppy-images')
         .getPublicUrl(filePath);
 
-      console.log('Got public URL:', publicUrl);
+      console.log('Successfully uploaded image:', publicUrl);
       return publicUrl;
     } catch (error) {
-      console.error('Error in uploadImage:', error);
-      throw error; // Re-throw to be caught by the caller
+      console.error('Error uploading image:', error);
+      throw error;
     }
   }
 
   static async deleteImage(imageUrl: string): Promise<void> {
+    console.log('Deleting image:', imageUrl);
     try {
-      // Extract file path from URL
       const url = new URL(imageUrl);
       const pathParts = url.pathname.split('/');
-      const filePath = pathParts.slice(-2).join('/'); // Get 'puppies/filename.ext'
+      const filePath = pathParts.slice(-2).join('/');
 
       const { error } = await supabase.storage
         .from('puppy-images')
         .remove([filePath]);
 
       if (error) {
-        console.error('Error deleting image:', error);
-        // Don't throw here as the puppy deletion should still proceed
+        handleSupabaseError('delete image', error);
       }
+
+      console.log('Successfully deleted image:', filePath);
     } catch (error) {
-      console.error('Error parsing image URL for deletion:', error);
+      console.error('Error deleting image:', error);
+      // Don't throw here as it's a non-critical operation
     }
   }
 }

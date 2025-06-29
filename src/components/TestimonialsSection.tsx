@@ -11,7 +11,7 @@ const TestimonialsSection = () => {
       puppy: "Golden Doodle - Charlie",
       rating: 5,
       text: "Our experience with Pick a Puppy was absolutely wonderful! Charlie is the most well-behaved and loving dog. The breeder's expertise really shows in how well-socialized he is.",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b587?w=150&q=80"
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80"
     },
     {
       name: "Mike & Lisa Chen",

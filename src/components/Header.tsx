@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Menu, X, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,7 +20,7 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-6xl">
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl">
+        <div className="bg-black/70 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl">
           <div className="container mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               {/* Logo */}
@@ -36,29 +35,30 @@ const Header = () => {
 
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center space-x-8">
-                <a href="#breeds" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                <a href="#breeds" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Our Breeds
                 </a>
-                <a href="#about" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                <a href="#about" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   About Us
                 </a>
-                <a href="#available" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                <a href="#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Available Puppies
                 </a>
-                <a href="#testimonials" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                <a href="#testimonials" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Reviews
                 </a>
-                <a href="#contact" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                <a href="#contact" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Contact
                 </a>
                 {isAdmin && (
-                  <a href="/admin" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                  <a href="/admin" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Admin
                   </a>
                 )}
               </nav>
 
-              {/* Auth Button */}
+
+              {/* Auth Buttons */}
               <div className="hidden md:flex items-center gap-4">
                 {user && (
                   <span className="text-sm text-white/80">
@@ -67,7 +67,7 @@ const Header = () => {
                 )}
                 <Button
                   onClick={handleAuthClick}
-                  className="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+                  className="bg-black/70 hover:bg-black/80 text-white border border-white/10 px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm"
                 >
                   {user ? (
                     <>
@@ -84,47 +84,44 @@ const Header = () => {
               </div>
 
               {/* Mobile Menu Button */}
-              <button
-                className="md:hidden text-white hover:text-white/80 transition-colors duration-200"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
+              <div className="md:hidden flex items-center gap-2">
+                <button
+                  className="text-white hover:text-white/80 transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                  {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </button>
+              </div>
             </div>
 
             {/* Mobile Navigation */}
             {isMenuOpen && (
-              <nav className="md:hidden mt-4 pb-4 border-t border-white/20 pt-4">
+              <nav className="md:hidden mt-4 pb-4 border-t border-white/20 pt-4 bg-black/90 rounded-lg p-4">
                 <div className="flex flex-col space-y-4">
-                  <a href="#breeds" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                  <a href="#breeds" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Our Breeds
                   </a>
-                  <a href="#about" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                  <a href="#about" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     About Us
                   </a>
-                  <a href="#available" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                  <a href="#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Available Puppies
                   </a>
-                  <a href="#testimonials" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                  <a href="#testimonials" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Reviews
                   </a>
-                  <a href="#contact" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
+                  <a href="#contact" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Contact
                   </a>
                   {isAdmin && (
-                    <a href="/admin" className="text-white/90 hover:text-white transition-colors duration-200 font-medium">
-                      Admin Dashboard
+                    <a href="/admin" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                      Admin
                     </a>
                   )}
-                  <div className="pt-4 border-t border-white/20">
-                    {user && (
-                      <p className="text-sm text-white/80 mb-2">
-                        Welcome, {user.email?.split('@')[0]}
-                      </p>
-                    )}
+                  <div className="pt-2 border-t border-white/10">
                     <Button
                       onClick={handleAuthClick}
-                      className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/30 px-6 py-2 rounded-full font-semibold backdrop-blur-sm"
+                      className="w-full bg-black/70 hover:bg-black/80 text-white border border-white/10 py-2 rounded-lg font-semibold transition-all duration-300"
                     >
                       {user ? (
                         <>
@@ -145,6 +142,8 @@ const Header = () => {
           </div>
         </div>
       </header>
+
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </>
   );
 };
