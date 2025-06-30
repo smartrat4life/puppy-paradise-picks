@@ -1,20 +1,13 @@
-
 import React from 'react';
 import { Heart, Phone, Mail, MapPin, Instagram, Facebook } from 'lucide-react';
-
 const Footer = () => {
-  return (
-    <footer className="bg-amber-900 text-white py-12">
+  return <footer className="bg-amber-900 text-white py-12">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and Description */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <img 
-                src="/lovable-uploads/bd88e703-c689-4c38-8f0f-1048f3b8da46.png" 
-                alt="Pick a Puppy Logo" 
-                className="w-12 h-12 object-contain"
-              />
+              <img src="/lovable-uploads/bd88e703-c689-4c38-8f0f-1048f3b8da46.png" alt="Pick a Puppy Logo" className="w-12 h-12 object-contain" />
               <h3 className="text-2xl font-bold">Pick a Puppy</h3>
             </div>
             <p className="text-amber-200 leading-relaxed mb-4">
@@ -28,21 +21,11 @@ const Footer = () => {
             
             {/* Social Media Links */}
             <div className="flex gap-4">
-              <a 
-                href="https://instagram.com/pickapuppybreeder" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-amber-200 hover:text-pink-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full"
-              >
+              <a href="https://instagram.com/pickapuppybreeder" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-amber-200 hover:text-pink-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full">
                 <Instagram className="w-5 h-5" />
                 <span className="text-sm">Instagram</span>
               </a>
-              <a 
-                href="https://facebook.com/pickapuppybreeder" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-amber-200 hover:text-blue-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full"
-              >
+              <a href="https://facebook.com/pickapuppybreeder" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-amber-200 hover:text-blue-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full">
                 <Facebook className="w-5 h-5" />
                 <span className="text-sm">Facebook</span>
               </a>
@@ -88,9 +71,7 @@ const Footer = () => {
 
         <div className="border-t border-amber-700 mt-8 pt-8 text-center">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-amber-200">
-              © 2024 Pick a Puppy. All rights reserved.
-            </p>
+            <p className="text-amber-200">© 2025 Pick a Puppy. All rights reserved.</p>
             <div className="flex gap-6 text-amber-200">
               <a href="/pricing" className="hover:text-white transition-colors duration-200">Pricing & Policies</a>
               <a href="/faq" className="hover:text-white transition-colors duration-200">FAQ</a>
@@ -99,8 +80,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
