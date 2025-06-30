@@ -86,11 +86,14 @@ const Header = () => {
                 <a href="#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Available Puppies
                 </a>
-                <a href="#testimonials" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
-                  Reviews
+                <a href="/testimonials" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                  Testimonials
                 </a>
-                <a href="#contact" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
-                  Contact
+                <a href="/pricing" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                  Pricing
+                </a>
+                <a href="/faq" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                  FAQ
                 </a>
                 {user && (
                   <a href="/favorites" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium flex items-center gap-1">

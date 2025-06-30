@@ -10,6 +10,9 @@ import GoToTopButton from "./components/GoToTopButton";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import Favorites from "./pages/Favorites";
+import Testimonials from "./pages/Testimonials";
+import Pricing from "./pages/Pricing";
+import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +24,9 @@ const AnimatedRoutes = () => {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Index />} />
+        <Route path="/testimonials" element={<Testimonials />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="*" element={<NotFound />} />
