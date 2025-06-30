@@ -4,12 +4,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Heart, MapPin, Calendar, Shield, Award, CheckCircle, Play } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Heart, MapPin, Calendar, Shield, Award, CheckCircle, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePuppies } from '@/hooks/usePuppies';
 import FavoriteButton from './FavoriteButton';
 
 const AvailablePuppies = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [breedFilter, setBreedFilter] = useState('all');
   const [genderFilter, setGenderFilter] = useState('all');
   const [ageFilter, setAgeFilter] = useState('all');
@@ -28,6 +30,13 @@ const AvailablePuppies = () => {
   };
 
   const filteredPuppies = puppies.filter(puppy => {
+    // Search filter
+    if (searchTerm && !puppy.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
+        !puppy.breed.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !puppy.description?.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return false;
+    }
+    
     if (breedFilter !== 'all' && puppy.breed !== breedFilter) return false;
     if (genderFilter !== 'all' && puppy.gender.toLowerCase() !== genderFilter) return false;
     if (ageFilter !== 'all') {
@@ -45,6 +54,14 @@ const AvailablePuppies = () => {
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const clearAllFilters = () => {
+    setSearchTerm('');
+    setBreedFilter('all');
+    setGenderFilter('all');
+    setAgeFilter('all');
+    setAvailabilityFilter('all');
   };
 
   if (loading) {
@@ -132,9 +149,25 @@ const AvailablePuppies = () => {
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Search and Filters */}
         <div className="mb-12 bg-gradient-to-r from-amber-50 to-teal-50 p-6 rounded-xl">
-          <h3 className="text-xl font-bold text-amber-900 mb-4 text-center">Filter Puppies</h3>
+          <h3 className="text-xl font-bold text-amber-900 mb-4 text-center">Search & Filter Puppies</h3>
+          
+          {/* Search Bar */}
+          <div className="mb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                type="text"
+                placeholder="Search by name, breed, or description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </div>
+
+          {/* Filter Dropdowns */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-amber-700 mb-2">Breed</label>
@@ -197,6 +230,19 @@ const AvailablePuppies = () => {
               </Select>
             </div>
           </div>
+
+          {/* Clear Filters Button */}
+          {(searchTerm || breedFilter !== 'all' || genderFilter !== 'all' || ageFilter !== 'all' || availabilityFilter !== 'all') && (
+            <div className="mt-4 text-center">
+              <Button
+                onClick={clearAllFilters}
+                variant="outline"
+                className="border-amber-300 text-amber-700 hover:bg-amber-100"
+              >
+                Clear All Filters
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -280,14 +326,14 @@ const AvailablePuppies = () => {
 
         {filteredPuppies.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-xl text-amber-700">No puppies match your current filters.</p>
+            <p className="text-xl text-amber-700">
+              {searchTerm || breedFilter !== 'all' || genderFilter !== 'all' || ageFilter !== 'all' || availabilityFilter !== 'all'
+                ? "No puppies match your current search and filters."
+                : "No puppies available at the moment."
+              }
+            </p>
             <Button 
-              onClick={() => {
-                setBreedFilter('all');
-                setGenderFilter('all');
-                setAgeFilter('all');
-                setAvailabilityFilter('all');
-              }}
+              onClick={clearAllFilters}
               className="mt-4 bg-teal-600 hover:bg-teal-700 text-white"
             >
               Clear All Filters
