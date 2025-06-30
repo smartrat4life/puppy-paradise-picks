@@ -130,49 +130,50 @@ const AvailablePuppies = () => {
         </div>
 
         {/* Trust Badges */}
-        <div className="flex justify-center items-center gap-8 mb-12 flex-wrap">
+        <div className="flex justify-center items-center gap-4 md:gap-8 mb-12 flex-wrap">
           <div className="flex items-center gap-2 text-teal-600">
-            <Shield className="w-6 h-6" />
-            <span className="font-semibold">Vet-Checked</span>
+            <Shield className="w-5 h-5 md:w-6 md:h-6" />
+            <span className="font-semibold text-sm md:text-base">Vet-Checked</span>
           </div>
           <div className="flex items-center gap-2 text-teal-600">
-            <Heart className="w-6 h-6" />
-            <span className="font-semibold">Health Guaranteed</span>
+            <Heart className="w-5 h-5 md:w-6 md:h-6" />
+            <span className="font-semibold text-sm md:text-base">Health Guaranteed</span>
           </div>
           <div className="flex items-center gap-2 text-teal-600">
-            <Award className="w-6 h-6" />
-            <span className="font-semibold">AKC Registered</span>
+            <Award className="w-5 h-5 md:w-6 md:h-6" />
+            <span className="font-semibold text-sm md:text-base">AKC Registered</span>
           </div>
           <div className="flex items-center gap-2 text-teal-600">
-            <CheckCircle className="w-6 h-6" />
-            <span className="font-semibold">13+ Years Experience</span>
+            <CheckCircle className="w-5 h-5 md:w-6 md:h-6" />
+            <span className="font-semibold text-sm md:text-base">13+ Years Experience</span>
           </div>
         </div>
 
-        {/* Search and Filters */}
-        <div className="mb-12 bg-gradient-to-r from-amber-50 to-teal-50 p-6 rounded-xl">
-          <h3 className="text-xl font-bold text-amber-900 mb-4 text-center">Search & Filter Puppies</h3>
-          
-          {/* Search Bar */}
-          <div className="mb-4">
+        {/* Prominent Search Bar */}
+        <div className="mb-8">
+          <div className="max-w-2xl mx-auto">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-teal-600 h-5 w-5" />
               <Input
                 type="text"
-                placeholder="Search by name, breed, or description..."
+                placeholder="🔍 Search puppies by name, breed, or description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-12 pr-4 py-4 text-lg border-2 border-teal-200 focus:border-teal-500 rounded-full shadow-lg"
               />
             </div>
           </div>
+        </div>
 
-          {/* Filter Dropdowns */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {/* Filters */}
+        <div className="mb-12 bg-white p-4 md:p-6 rounded-xl shadow-lg border-2 border-amber-100">
+          <h3 className="text-lg md:text-xl font-bold text-amber-900 mb-4 text-center">Filter Puppies</h3>
+          
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-amber-700 mb-2">Breed</label>
               <Select value={breedFilter} onValueChange={setBreedFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="All Breeds" />
                 </SelectTrigger>
                 <SelectContent>
@@ -190,7 +191,7 @@ const AvailablePuppies = () => {
             <div>
               <label className="block text-sm font-medium text-amber-700 mb-2">Gender</label>
               <Select value={genderFilter} onValueChange={setGenderFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="All Genders" />
                 </SelectTrigger>
                 <SelectContent>
@@ -204,7 +205,7 @@ const AvailablePuppies = () => {
             <div>
               <label className="block text-sm font-medium text-amber-700 mb-2">Age</label>
               <Select value={ageFilter} onValueChange={setAgeFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="All Ages" />
                 </SelectTrigger>
                 <SelectContent>
@@ -217,9 +218,9 @@ const AvailablePuppies = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-amber-700 mb-2">Availability</label>
+              <label className="block text-sm font-medium text-amber-700 mb-2">Status</label>
               <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
@@ -233,11 +234,11 @@ const AvailablePuppies = () => {
 
           {/* Clear Filters Button */}
           {(searchTerm || breedFilter !== 'all' || genderFilter !== 'all' || ageFilter !== 'all' || availabilityFilter !== 'all') && (
-            <div className="mt-4 text-center">
+            <div className="mt-6 text-center">
               <Button
                 onClick={clearAllFilters}
                 variant="outline"
-                className="border-amber-300 text-amber-700 hover:bg-amber-100"
+                className="border-amber-300 text-amber-700 hover:bg-amber-100 px-6 py-2"
               >
                 Clear All Filters
               </Button>
@@ -245,14 +246,14 @@ const AvailablePuppies = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {filteredPuppies.map((puppy) => (
             <Card key={puppy.id} className="group overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-teal-300">
               <div className="relative overflow-hidden">
                 <img 
                   src={puppy.image_url || 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80'} 
                   alt={puppy.name}
-                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute top-4 right-4 flex flex-col gap-2">
                   <Badge className={puppy.status === 'available' ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"}>
@@ -260,7 +261,7 @@ const AvailablePuppies = () => {
                   </Badge>
                 </div>
                 <div className="absolute top-4 left-4 flex flex-col gap-1">
-                  <Badge variant="secondary" className="bg-white/90 text-amber-800">
+                  <Badge variant="secondary" className="bg-white/90 text-amber-800 font-bold">
                     ${puppy.price}
                   </Badge>
                 </div>
@@ -269,9 +270,9 @@ const AvailablePuppies = () => {
                 </div>
               </div>
               
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-2xl font-bold text-amber-900 group-hover:text-teal-700 transition-colors duration-300">
+                  <h3 className="text-xl md:text-2xl font-bold text-amber-900 group-hover:text-teal-700 transition-colors duration-300">
                     {puppy.name}
                   </h3>
                 </div>
@@ -305,7 +306,7 @@ const AvailablePuppies = () => {
                   </Badge>
                 </div>
                 
-                <p className="text-amber-700 mb-4 leading-relaxed text-sm">
+                <p className="text-amber-700 mb-4 leading-relaxed text-sm line-clamp-3">
                   {puppy.description}
                 </p>
                 
@@ -326,7 +327,7 @@ const AvailablePuppies = () => {
 
         {filteredPuppies.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-xl text-amber-700">
+            <p className="text-xl text-amber-700 mb-4">
               {searchTerm || breedFilter !== 'all' || genderFilter !== 'all' || ageFilter !== 'all' || availabilityFilter !== 'all'
                 ? "No puppies match your current search and filters."
                 : "No puppies available at the moment."
@@ -334,7 +335,7 @@ const AvailablePuppies = () => {
             </p>
             <Button 
               onClick={clearAllFilters}
-              className="mt-4 bg-teal-600 hover:bg-teal-700 text-white"
+              className="bg-teal-600 hover:bg-teal-700 text-white"
             >
               Clear All Filters
             </Button>

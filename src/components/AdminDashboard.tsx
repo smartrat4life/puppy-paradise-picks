@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { PlusCircle, Trash2, Users, Heart, Mail, FileText, Pencil, AlertCircle, Loader2 } from 'lucide-react';
+import { PlusCircle, Trash2, Users, Heart, Mail, FileText, Pencil, AlertCircle, Loader2, Menu } from 'lucide-react';
 import PuppyForm from './PuppyForm';
 import { usePuppies } from '@/hooks/usePuppies';
 import { InquiryService, Inquiry } from '@/services/inquiryService';
@@ -167,6 +167,19 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to logout. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   // Fixed loading condition - only show loading if initial data is still loading
   const isInitialLoading = puppiesLoading && inquiriesLoading && applicationsLoading;
 
@@ -215,270 +228,285 @@ const AdminDashboard: React.FC = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className="container mx-auto p-6">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-amber-900">Admin Dashboard</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">Welcome, {user?.email}</span>
-            <Button onClick={signOut} variant="outline">
-              Logout
-            </Button>
+      <div className="min-h-screen bg-gray-50">
+        {/* Mobile-first header */}
+        <div className="bg-white shadow-sm border-b p-4 md:p-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h1 className="text-2xl md:text-3xl font-bold text-amber-900">Admin Dashboard</h1>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+              <span className="text-sm text-gray-600 truncate">Welcome, {user?.email}</span>
+              <Button onClick={handleLogout} variant="outline" size="sm">
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Puppies</CardTitle>
-              <Heart className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{puppies.length}</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Available</CardTitle>
-              <Heart className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">
-                {puppies.filter(p => p.status === 'available').length}
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Inquiries</CardTitle>
-              <Mail className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{inquiries.length}</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Applications</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{applications.length}</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Tabs defaultValue="puppies" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="puppies">Puppies</TabsTrigger>
-            <TabsTrigger value="inquiries">Inquiries</TabsTrigger>
-            <TabsTrigger value="applications">Applications</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="puppies">
+        <div className="p-4 md:p-6">
+          {/* Stats Cards - Mobile responsive grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle>Manage Puppies</CardTitle>
-                  <Button onClick={handleAddPuppy}>
-                    <PlusCircle className="h-4 w-4 mr-2" />
-                    Add New Puppy
-                  </Button>
-                </div>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Puppies</CardTitle>
+                <Heart className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {puppies.map((puppy) => (
-                    <div key={puppy.id} className="border rounded-lg p-4">
-                      <div className="flex justify-between items-start">
-                        <div className="flex gap-4 flex-1">
-                          {puppy.image_url && (
-                            <img 
-                              src={puppy.image_url} 
-                              alt={puppy.name}
-                              className="w-16 h-16 object-cover rounded-md"
-                            />
-                          )}
+                <div className="text-2xl font-bold">{puppies.length}</div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Available</CardTitle>
+                <Heart className="h-4 w-4 text-green-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-green-600">
+                  {puppies.filter(p => p.status === 'available').length}
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Inquiries</CardTitle>
+                <Mail className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{inquiries.length}</div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Applications</CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{applications.length}</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Mobile-responsive tabs */}
+          <Tabs defaultValue="puppies" className="space-y-4">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="puppies" className="text-xs sm:text-sm">Puppies</TabsTrigger>
+              <TabsTrigger value="inquiries" className="text-xs sm:text-sm">Inquiries</TabsTrigger>
+              <TabsTrigger value="applications" className="text-xs sm:text-sm">Applications</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="puppies">
+              <Card>
+                <CardHeader>
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <CardTitle>Manage Puppies</CardTitle>
+                    <Button onClick={handleAddPuppy} size="sm">
+                      <PlusCircle className="h-4 w-4 mr-2" />
+                      <span className="hidden sm:inline">Add New Puppy</span>
+                      <span className="sm:hidden">Add</span>
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {puppies.map((puppy) => (
+                      <div key={puppy.id} className="border rounded-lg p-4">
+                        <div className="flex flex-col lg:flex-row justify-between gap-4">
+                          <div className="flex gap-4 flex-1">
+                            {puppy.image_url && (
+                              <img 
+                                src={puppy.image_url} 
+                                alt={puppy.name}
+                                className="w-16 h-16 object-cover rounded-md flex-shrink-0"
+                              />
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-lg truncate">{puppy.name}</h3>
+                              <p className="text-gray-600 text-sm">{puppy.breed} • {puppy.gender}</p>
+                              <p className="text-amber-600 font-bold">${puppy.price}</p>
+                              <p className="text-sm text-gray-500 mt-2 line-clamp-2">{puppy.description}</p>
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Badge className={getStatusColor(puppy.status)}>
+                              {puppy.status}
+                            </Badge>
+                            <div className="flex flex-wrap gap-1">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => updatePuppyStatus(puppy.id, 'available')}
+                                disabled={puppy.status === 'available'}
+                                className="text-xs"
+                              >
+                                Available
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => updatePuppyStatus(puppy.id, 'reserved')}
+                                disabled={puppy.status === 'reserved'}
+                                className="text-xs"
+                              >
+                                Reserved
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => updatePuppyStatus(puppy.id, 'sold')}
+                                disabled={puppy.status === 'sold'}
+                                className="text-xs"
+                              >
+                                Sold
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleEditPuppy(puppy)}
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleDeleteClick(puppy)}
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {puppies.length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        No puppies found. Add your first puppy to get started.
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="inquiries">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Customer Inquiries</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {inquiries.map((inquiry) => (
+                      <div key={inquiry.id} className="border rounded-lg p-4">
+                        <div className="flex flex-col lg:flex-row justify-between gap-4">
                           <div className="flex-1">
-                            <h3 className="font-semibold text-lg">{puppy.name}</h3>
-                            <p className="text-gray-600">{puppy.breed} • {puppy.gender}</p>
-                            <p className="text-amber-600 font-bold">${puppy.price}</p>
-                            <p className="text-sm text-gray-500 mt-2 line-clamp-2">{puppy.description}</p>
+                            <h3 className="font-semibold">{inquiry.name}</h3>
+                            <p className="text-sm text-gray-600 break-all">{inquiry.email} • {inquiry.phone}</p>
+                            <p className="mt-2 text-sm">{inquiry.message}</p>
+                            <p className="text-xs text-gray-500 mt-2">
+                              {new Date(inquiry.created_at).toLocaleDateString()}
+                            </p>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Badge className={getStatusColor(puppy.status)}>
-                            {puppy.status}
-                          </Badge>
-                          <div className="flex gap-1">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updatePuppyStatus(puppy.id, 'available')}
-                              disabled={puppy.status === 'available'}
-                            >
-                              Available
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updatePuppyStatus(puppy.id, 'reserved')}
-                              disabled={puppy.status === 'reserved'}
-                            >
-                              Reserved
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updatePuppyStatus(puppy.id, 'sold')}
-                              disabled={puppy.status === 'sold'}
-                            >
-                              Sold
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleEditPuppy(puppy)}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleDeleteClick(puppy)}
-                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                          <div className="flex flex-col gap-2">
+                            <Badge className={getStatusColor(inquiry.status)}>
+                              {inquiry.status}
+                            </Badge>
+                            <div className="flex flex-wrap gap-1">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => updateInquiryStatus(inquiry.id, 'responded')}
+                                disabled={inquiry.status === 'responded'}
+                                className="text-xs"
+                              >
+                                Mark Responded
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => updateInquiryStatus(inquiry.id, 'closed')}
+                                disabled={inquiry.status === 'closed'}
+                                className="text-xs"
+                              >
+                                Close
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  {puppies.length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                      No puppies found. Add your first puppy to get started.
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    ))}
+                    {inquiries.length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        No inquiries found.
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-          <TabsContent value="inquiries">
-            <Card>
-              <CardHeader>
-                <CardTitle>Customer Inquiries</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {inquiries.map((inquiry) => (
-                    <div key={inquiry.id} className="border rounded-lg p-4">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h3 className="font-semibold">{inquiry.name}</h3>
-                          <p className="text-sm text-gray-600">{inquiry.email} • {inquiry.phone}</p>
-                          <p className="mt-2 text-sm">{inquiry.message}</p>
-                          <p className="text-xs text-gray-500 mt-2">
-                            {new Date(inquiry.created_at).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Badge className={getStatusColor(inquiry.status)}>
-                            {inquiry.status}
-                          </Badge>
-                          <div className="flex gap-1">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updateInquiryStatus(inquiry.id, 'responded')}
-                              disabled={inquiry.status === 'responded'}
-                            >
-                              Mark Responded
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updateInquiryStatus(inquiry.id, 'closed')}
-                              disabled={inquiry.status === 'closed'}
-                            >
-                              Close
-                            </Button>
+            <TabsContent value="applications">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Adoption Applications</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {applications.map((app) => (
+                      <div key={app.id} className="border rounded-lg p-4">
+                        <div className="flex flex-col lg:flex-row justify-between gap-4">
+                          <div className="flex-1">
+                            <h3 className="font-semibold">{app.applicant_name}</h3>
+                            <p className="text-sm text-gray-600 break-all">{app.applicant_email} • {app.applicant_phone}</p>
+                            <div className="mt-2 space-y-1 text-sm">
+                              <p><strong>Living Situation:</strong> {app.living_situation}</p>
+                              <p><strong>Pet Experience:</strong> {app.experience_with_pets}</p>
+                              <p><strong>Reason:</strong> {app.reason_for_adoption}</p>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-2">
+                              {new Date(app.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Badge className={getStatusColor(app.status)}>
+                              {app.status}
+                            </Badge>
+                            <div className="flex flex-wrap gap-1">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => updateApplicationStatus(app.id, 'approved')}
+                                disabled={app.status === 'approved'}
+                                className="text-xs"
+                              >
+                                Approve
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => updateApplicationStatus(app.id, 'rejected')}
+                                disabled={app.status === 'rejected'}
+                                className="text-xs"
+                              >
+                                Reject
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  {inquiries.length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                      No inquiries found.
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="applications">
-            <Card>
-              <CardHeader>
-                <CardTitle>Adoption Applications</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {applications.map((app) => (
-                    <div key={app.id} className="border rounded-lg p-4">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h3 className="font-semibold">{app.applicant_name}</h3>
-                          <p className="text-sm text-gray-600">{app.applicant_email} • {app.applicant_phone}</p>
-                          <div className="mt-2 space-y-1 text-sm">
-                            <p><strong>Living Situation:</strong> {app.living_situation}</p>
-                            <p><strong>Pet Experience:</strong> {app.experience_with_pets}</p>
-                            <p><strong>Reason:</strong> {app.reason_for_adoption}</p>
-                          </div>
-                          <p className="text-xs text-gray-500 mt-2">
-                            {new Date(app.created_at).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Badge className={getStatusColor(app.status)}>
-                            {app.status}
-                          </Badge>
-                          <div className="flex gap-1">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updateApplicationStatus(app.id, 'approved')}
-                              disabled={app.status === 'approved'}
-                            >
-                              Approve
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updateApplicationStatus(app.id, 'rejected')}
-                              disabled={app.status === 'rejected'}
-                            >
-                              Reject
-                            </Button>
-                          </div>
-                        </div>
+                    ))}
+                    {applications.length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        No applications found.
                       </div>
-                    </div>
-                  ))}
-                  {applications.length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                      No applications found.
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </>
   );

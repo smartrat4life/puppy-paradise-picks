@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import AdminDashboard from '@/components/AdminDashboard';
@@ -5,18 +6,19 @@ import AuthModal from '@/components/AuthModal';
 
 const Admin: React.FC = () => {
   const { user, loading, isAdmin } = useAuth();
-  const [loadingTimeout, setLoadingTimeout] = useState(false);
+  const [showTimeout, setShowTimeout] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (loading) {
-        setLoadingTimeout(true);
+        setShowTimeout(true);
       }
-    }, 5000); // 5 second timeout
+    }, 8000); // Increased timeout to 8 seconds
 
     return () => clearTimeout(timer);
   }, [loading]);
 
+  // Show loading state with timeout warning
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
@@ -25,16 +27,22 @@ const Admin: React.FC = () => {
         <p className="text-gray-600 text-center max-w-md mb-6">
           Please wait while we verify your credentials and load the admin interface.
         </p>
-        {loadingTimeout && (
-          <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 max-w-md text-center">
-            <p className="font-medium">Taking longer than expected?</p>
-            <p className="text-sm">Check your internet connection or try refreshing the page.</p>
+        {showTimeout && (
+          <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 max-w-md text-center">
+            <p className="font-medium mb-2">Taking longer than expected?</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition-colors"
+            >
+              Refresh Page
+            </button>
           </div>
         )}
       </div>
     );
   }
 
+  // Show login form if not authenticated
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50 p-6">
@@ -51,6 +59,7 @@ const Admin: React.FC = () => {
     );
   }
 
+  // Show access denied if user is not admin
   if (!isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50 p-6">
@@ -73,6 +82,7 @@ const Admin: React.FC = () => {
     );
   }
 
+  // Render admin dashboard
   return <AdminDashboard />;
 };
 
