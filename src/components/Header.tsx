@@ -7,11 +7,21 @@ import AuthModal from '@/components/AuthModal';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { user, signOut, isAdmin } = useAuth();
 
-  const handleAuthClick = () => {
+  const handleAuthClick = async () => {
     if (user) {
-      signOut();
+      try {
+        setIsLoggingOut(true);
+        await signOut();
+        // No need to redirect or refresh - the auth state update will handle UI changes
+      } catch (error) {
+        console.error('Logout error:', error);
+        // You could add a toast notification here if desired
+      } finally {
+        setIsLoggingOut(false);
+      }
     } else {
       setIsAuthModalOpen(true);
     }
@@ -67,9 +77,18 @@ const Header = () => {
                 )}
                 <Button
                   onClick={handleAuthClick}
-                  className="bg-black/70 hover:bg-black/80 text-white border border-white/10 px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+                  disabled={isLoggingOut}
+                  className="bg-black/70 hover:bg-black/80 text-white border border-white/10 px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {user ? (
+                  {isLoggingOut ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Logging out...
+                    </>
+                  ) : user ? (
                     <>
                       <LogOut className="w-4 h-4 mr-2" />
                       Logout
@@ -121,9 +140,18 @@ const Header = () => {
                   <div className="pt-2 border-t border-white/10">
                     <Button
                       onClick={handleAuthClick}
-                      className="w-full bg-black/70 hover:bg-black/80 text-white border border-white/10 py-2 rounded-lg font-semibold transition-all duration-300"
+                      disabled={isLoggingOut}
+                      className="w-full bg-black/70 hover:bg-black/80 text-white border border-white/10 py-2 rounded-lg font-semibold transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                      {user ? (
+                      {isLoggingOut ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Logging out...
+                        </>
+                      ) : user ? (
                         <>
                           <LogOut className="w-4 h-4 mr-2" />
                           Logout
