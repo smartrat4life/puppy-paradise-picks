@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+
+import React, { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { Eye, EyeOff, Mail } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -14,356 +16,317 @@ interface AuthModalProps {
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('login');
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [activeTab, setActiveTab] = useState('signin');
+  const [resetEmailSent, setResetEmailSent] = useState(false);
+
   const { signIn, signUp } = useAuth();
-  const { toast } = useToast();
 
-  const [loginForm, setLoginForm] = useState({
-    email: '',
-    password: '',
-  });
-
-  const [signUpForm, setSignUpForm] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
-
-  // Reset form errors when switching tabs
-  useEffect(() => {
-    setFormErrors({});
-  }, [activeTab]);
-
-  const validateLoginForm = () => {
-    const errors: Record<string, string> = {};
-    if (!loginForm.email) errors.email = 'Email is required';
-    if (!loginForm.password) errors.password = 'Password is required';
-    return errors;
-  };
-
-  const validateSignUpForm = () => {
-    const errors: Record<string, string> = {};
-    if (!signUpForm.fullName) errors.fullName = 'Full name is required';
-    if (!signUpForm.email) {
-      errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(signUpForm.email)) {
-      errors.email = 'Email is invalid';
-    }
-    if (!signUpForm.password) {
-      errors.password = 'Password is required';
-    } else if (signUpForm.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
-    }
-    if (signUpForm.password !== signUpForm.confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
-    }
-    return errors;
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    const errors = validateLoginForm();
-    
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    setIsLoading(true);
-    setFormErrors({});
+    setLoading(true);
+    setError('');
 
     try {
-      const { error } = await signIn(loginForm.email, loginForm.password);
-
+      const { error } = await signIn(email, password);
       if (error) {
-        throw error;
+        setError(error.message || 'Failed to sign in');
+      } else {
+        onClose();
+        setEmail('');
+        setPassword('');
       }
-
-      toast({
-        title: 'Welcome back!',
-        description: 'You have been successfully logged in.',
-      });
-      
-      // Reset form and close modal on success
-      setLoginForm({ email: '', password: '' });
-      onClose();
-    } catch (error: any) {
-      console.error('Login error:', error);
-      toast({
-        title: 'Login Failed',
-        description: error.message || 'An error occurred during login',
-        variant: 'destructive',
-      });
+    } catch (err) {
+      setError('An unexpected error occurred');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const errors = validateSignUpForm();
-    
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
+    setLoading(true);
+    setError('');
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
       return;
     }
 
-    setIsLoading(true);
-    setFormErrors({});
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      setLoading(false);
+      return;
+    }
 
     try {
-      const { error } = await signUp(
-        signUpForm.email, 
-        signUpForm.password, 
-        signUpForm.fullName
-      );
-
-      if (error) throw error;
-
-      toast({
-        title: 'Account Created!',
-        description: 'Please check your email to verify your account.',
-      });
-      
-      // Reset form and switch to login tab
-      setSignUpForm({
-        fullName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
-      setActiveTab('login');
-    } catch (error: any) {
-      console.error('Sign up error:', error);
-      toast({
-        title: 'Sign Up Failed',
-        description: error.message || 'An error occurred during sign up',
-        variant: 'destructive',
-      });
+      const { error } = await signUp(email, password, fullName);
+      if (error) {
+        setError(error.message || 'Failed to sign up');
+      } else {
+        setSuccess('Account created successfully! Please check your email to verify your account.');
+        setEmail('');
+        setPassword('');
+        setFullName('');
+        setConfirmPassword('');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      setError('Please enter your email address');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) {
+        setError(error.message);
+      } else {
+        setResetEmailSent(true);
+        setSuccess('Password reset email sent! Check your inbox.');
+      }
+    } catch (err) {
+      setError('Failed to send reset email');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetForm = () => {
+    setEmail('');
+    setPassword('');
+    setFullName('');
+    setConfirmPassword('');
+    setError('');
+    setSuccess('');
+    setResetEmailSent(false);
+    setActiveTab('signin');
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) {
+        onClose();
+        resetForm();
+      }
+    }}>
+      <DialogContent className="sm:max-w-md" role="dialog" aria-labelledby="auth-modal-title">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center text-gray-900">
-            {activeTab === 'login' ? 'Welcome Back' : 'Create an Account'}
+          <DialogTitle id="auth-modal-title" className="text-center text-2xl font-bold text-amber-900">
+            Welcome to Pick a Puppy
           </DialogTitle>
-          <DialogDescription className="text-center text-gray-600">
-            {activeTab === 'login' 
-              ? 'Sign in to access your account' 
-              : 'Join our community today'}
-          </DialogDescription>
         </DialogHeader>
-        
-        <Tabs 
-          value={activeTab} 
-          onValueChange={setActiveTab}
-          className="w-full mt-4"
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Sign In</TabsTrigger>
+
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="signin">Sign In</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsTrigger value="reset">Reset Password</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="login" className="mt-6 space-y-4">
-            <form onSubmit={handleLogin} className="space-y-4">
+          <TabsContent value="signin" className="space-y-4">
+            <form onSubmit={handleSignIn} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="login-email">Email</Label>
+                <Label htmlFor="signin-email">Email</Label>
                 <Input
-                  id="login-email"
+                  id="signin-email"
                   type="email"
-                  placeholder="your@email.com"
-                  value={loginForm.email}
-                  onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}
-                  disabled={isLoading}
-                  className={formErrors.email ? 'border-red-500' : ''}
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  aria-describedby={error ? "error-message" : undefined}
                 />
-                {formErrors.email && (
-                  <p className="text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
-                    {formErrors.email}
-                  </p>
-                )}
               </div>
-              
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="login-password">Password</Label>
-                  <button 
-                    type="button" 
-                    className="text-sm text-teal-600 hover:underline"
-                    onClick={() => {
-                      // Handle forgot password
-                      toast({
-                        title: 'Reset Password',
-                        description: 'Please check your email for a password reset link.',
-                      });
-                    }}
+                <Label htmlFor="signin-password">Password</Label>
+                <div className="relative">
+                  <Input
+                    id="signin-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    autoComplete="current-password"
+                    aria-describedby={error ? "error-message" : undefined}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
-                    Forgot password?
-                  </button>
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
                 </div>
-                <Input
-                  id="login-password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={loginForm.password}
-                  onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
-                  disabled={isLoading}
-                  className={formErrors.password ? 'border-red-500' : ''}
-                />
-                {formErrors.password && (
-                  <p className="text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
-                    {formErrors.password}
-                  </p>
-                )}
               </div>
-
               <Button 
                 type="submit" 
-                className="w-full mt-2"
-                disabled={isLoading}
+                className="w-full bg-teal-600 hover:bg-teal-700" 
+                disabled={loading}
+                aria-describedby={loading ? "loading-message" : undefined}
               >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
-                  </>
-                ) : 'Sign In'}
+                {loading ? 'Signing In...' : 'Sign In'}
               </Button>
             </form>
           </TabsContent>
 
-          <TabsContent value="signup" className="mt-6 space-y-4">
+          <TabsContent value="signup" className="space-y-4">
             <form onSubmit={handleSignUp} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="signup-name">Full Name</Label>
                 <Input
                   id="signup-name"
                   type="text"
-                  placeholder="John Doe"
-                  value={signUpForm.fullName}
-                  onChange={(e) => setSignUpForm({...signUpForm, fullName: e.target.value})}
-                  disabled={isLoading}
-                  className={formErrors.fullName ? 'border-red-500' : ''}
+                  placeholder="Enter your full name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                  autoComplete="name"
                 />
-                {formErrors.fullName && (
-                  <p className="text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
-                    {formErrors.fullName}
-                  </p>
-                )}
               </div>
-              
               <div className="space-y-2">
                 <Label htmlFor="signup-email">Email</Label>
                 <Input
                   id="signup-email"
                   type="email"
-                  placeholder="your@email.com"
-                  value={signUpForm.email}
-                  onChange={(e) => setSignUpForm({...signUpForm, email: e.target.value})}
-                  disabled={isLoading}
-                  className={formErrors.email ? 'border-red-500' : ''}
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
                 />
-                {formErrors.email && (
-                  <p className="text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
-                    {formErrors.email}
-                  </p>
-                )}
               </div>
-              
               <div className="space-y-2">
                 <Label htmlFor="signup-password">Password</Label>
-                <Input
-                  id="signup-password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={signUpForm.password}
-                  onChange={(e) => setSignUpForm({...signUpForm, password: e.target.value})}
-                  disabled={isLoading}
-                  className={formErrors.password ? 'border-red-500' : ''}
-                />
-                {formErrors.password && (
-                  <p className="text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
-                    {formErrors.password}
-                  </p>
-                )}
-                <p className="text-xs text-gray-500 mt-1">
-                  Must be at least 6 characters
-                </p>
+                <div className="relative">
+                  <Input
+                    id="signup-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Create a password (min. 6 characters)"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    autoComplete="new-password"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
+                </div>
               </div>
-              
               <div className="space-y-2">
-                <Label htmlFor="signup-confirm">Confirm Password</Label>
+                <Label htmlFor="confirm-password">Confirm Password</Label>
                 <Input
-                  id="signup-confirm"
+                  id="confirm-password"
                   type="password"
-                  placeholder="••••••••"
-                  value={signUpForm.confirmPassword}
-                  onChange={(e) => setSignUpForm({...signUpForm, confirmPassword: e.target.value})}
-                  disabled={isLoading}
-                  className={formErrors.confirmPassword ? 'border-red-500' : ''}
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  autoComplete="new-password"
                 />
-                {formErrors.confirmPassword && (
-                  <p className="text-sm text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
-                    {formErrors.confirmPassword}
-                  </p>
-                )}
               </div>
-
               <Button 
                 type="submit" 
-                className="w-full mt-2"
-                disabled={isLoading}
+                className="w-full bg-teal-600 hover:bg-teal-700" 
+                disabled={loading}
               >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating Account...
-                  </>
-                ) : 'Sign Up'}
+                {loading ? 'Creating Account...' : 'Sign Up'}
               </Button>
             </form>
           </TabsContent>
+
+          <TabsContent value="reset" className="space-y-4">
+            {!resetEmailSent ? (
+              <form onSubmit={handlePasswordReset} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="reset-email">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Input
+                      id="reset-email"
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="pl-10"
+                      autoComplete="email"
+                    />
+                  </div>
+                </div>
+                <Button 
+                  type="submit" 
+                  className="w-full bg-teal-600 hover:bg-teal-700" 
+                  disabled={loading}
+                >
+                  {loading ? 'Sending...' : 'Send Reset Email'}
+                </Button>
+              </form>
+            ) : (
+              <div className="text-center space-y-4">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                  <Mail className="w-6 h-6 text-green-600" />
+                </div>
+                <p className="text-sm text-gray-600">
+                  We've sent a password reset link to your email. Please check your inbox and follow the instructions.
+                </p>
+                <Button 
+                  onClick={() => setResetEmailSent(false)}
+                  variant="outline"
+                  className="w-full"
+                >
+                  Send Another Email
+                </Button>
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
 
-        <div className="mt-4 text-center text-sm text-gray-600">
-          {activeTab === 'login' ? (
-            <p>
-              Don't have an account?{' '}
-              <button 
-                type="button" 
-                className="font-medium text-teal-600 hover:underline focus:outline-none"
-                onClick={() => setActiveTab('signup')}
-              >
-                Sign up
-              </button>
-            </p>
-          ) : (
-            <p>
-              Already have an account?{' '}
-              <button 
-                type="button" 
-                className="font-medium text-teal-600 hover:underline focus:outline-none"
-                onClick={() => setActiveTab('login')}
-              >
-                Sign in
-              </button>
-            </p>
-          )}
-        </div>
+        {error && (
+          <Alert variant="destructive" role="alert">
+            <AlertDescription id="error-message">{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {success && (
+          <Alert className="border-green-200 text-green-800 bg-green-50" role="status">
+            <AlertDescription>{success}</AlertDescription>
+          </Alert>
+        )}
       </DialogContent>
     </Dialog>
   );
