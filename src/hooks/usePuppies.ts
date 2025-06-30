@@ -28,12 +28,8 @@ export const usePuppies = () => {
     setConnectionStatus('loading');
     
     try {
-      console.log('Fetching puppies directly from PuppyService...');
+      console.log('Fetching puppies from PuppyService...');
       const data = await PuppyService.getAllPuppies();
-      
-      if (!data) {
-        throw new Error('No data returned from server');
-      }
       
       console.log(`Successfully fetched ${data.length} puppies`);
       setPuppies(data);
@@ -45,7 +41,7 @@ export const usePuppies = () => {
       setPuppies([]);
       setConnectionStatus('error');
       
-      showErrorToast('Error', errorMessage);
+      showErrorToast('Error loading puppies', errorMessage);
     } finally {
       setLoading(false);
     }

@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 
@@ -21,13 +22,16 @@ export class PuppyService {
     console.log('PuppyService.getAllPuppies called');
     
     try {
-      console.log('Creating Supabase query...');
-      const { data, error, status } = await supabase
+      console.log('Creating Supabase query for puppies...');
+      
+      // Use a simple query without any auth context to ensure public access
+      const { data, error } = await supabase
         .from('puppies')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
+        console.error('Supabase query error:', error);
         handleSupabaseError('fetch puppies', error);
       }
 
