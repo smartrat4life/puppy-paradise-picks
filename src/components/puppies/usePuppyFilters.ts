@@ -65,7 +65,7 @@ export const usePuppyFilters = (puppies: Puppy[]) => {
     setMaxWeeks('');
   };
 
-  const hasActiveFilters = searchTerm || selectedBreed !== 'all' || selectedGender !== 'all' || minPrice || maxPrice || minWeeks || maxWeeks;
+  const hasActiveFilters = Boolean(searchTerm) || selectedBreed !== 'all' || selectedGender !== 'all' || Boolean(minPrice) || Boolean(maxPrice) || Boolean(minWeeks) || Boolean(maxWeeks);
 
   return {
     searchTerm,
