@@ -7,7 +7,7 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <img src="/lovable-uploads/bd88e703-c689-4c38-8f0f-1048f3b8da46.png" alt="Pick a Puppy Logo" className="w-12 h-12 object-contain" />
+              <img src="/images/logo/puppy-logo.png" alt="Pick a Puppy Logo" className="w-12 h-12 object-contain" />
               <h3 className="text-2xl font-bold">Pick a Puppy</h3>
             </div>
             <p className="text-amber-200 leading-relaxed mb-4">
@@ -16,16 +16,16 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-2 text-amber-200 mb-4">
               <Heart className="w-5 h-5 text-red-400" />
-              <span>Breeding with love since 2010</span>
+              <span>Breeding with love since 2012</span>
             </div>
             
             {/* Social Media Links */}
             <div className="flex gap-4">
-              <a href="https://instagram.com/pickapuppybreeder" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-amber-200 hover:text-pink-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full">
+              <a href="https://www.instagram.com/pickapuppyplus?igsh=MTJ1OTZsbzc4cjhjZw==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-amber-200 hover:text-pink-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full">
                 <Instagram className="w-5 h-5" />
                 <span className="text-sm">Instagram</span>
               </a>
-              <a href="https://facebook.com/pickapuppybreeder" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-amber-200 hover:text-blue-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full">
+              <a href="https://www.facebook.com/profile.php?id=100088549120878" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-amber-200 hover:text-blue-400 transition-colors duration-300 bg-amber-800/50 px-3 py-2 rounded-full">
                 <Facebook className="w-5 h-5" />
                 <span className="text-sm">Facebook</span>
               </a>
@@ -51,14 +51,14 @@ const Footer = () => {
             <div className="space-y-3 text-amber-200">
               <div className="flex items-center gap-3">
                 <Phone className="w-5 h-5" />
-                <a href="tel:+15551234567" className="hover:text-white transition-colors duration-200">
-                  (555) 123-4567
+                <a href="tel:+1555123456785" className="hover:text-white transition-colors duration-200">
+                  (000) 123-4567
                 </a>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5" />
                 <a href="mailto:info@pickapuppy.com" className="hover:text-white transition-colors duration-200">
-                  info@pickapuppy.com
+                  sandywest974@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-3">
@@ -75,7 +75,7 @@ const Footer = () => {
             <div className="flex gap-6 text-amber-200">
               <a href="/pricing" className="hover:text-white transition-colors duration-200">Pricing & Policies</a>
               <a href="/faq" className="hover:text-white transition-colors duration-200">FAQ</a>
-              <span className="hover:text-white transition-colors duration-200 cursor-pointer">Health Guarantee</span>
+              <a href="/pricing" className="hover:text-white transition-colors duration-200 cursor-pointer">Health Guarantee</a>
             </div>
           </div>
         </div>

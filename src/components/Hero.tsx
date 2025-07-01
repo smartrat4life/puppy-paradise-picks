@@ -64,7 +64,7 @@ const Hero = () => {
         {/* Social Media Links */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-6 mb-8 md:mb-10 animate-fade-in delay-600 max-w-2xl mx-auto px-2">
           <a 
-            href="https://instagram.com/pickapuppybreeder" 
+            href="https://www.instagram.com/pickapuppyplus?igsh=MTJ1OTZsbzc4cjhjZw==" 
             target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto flex items-center justify-center gap-2 text-white/90 hover:text-pink-400 transition-colors duration-300 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm hover:bg-black/50"
@@ -73,7 +73,7 @@ const Hero = () => {
             <span className="text-xs sm:text-sm font-medium">Follow on Instagram</span>
           </a>
           <a 
-            href="https://facebook.com/pickapuppybreeder" 
+            href="https://www.facebook.com/profile.php?id=100088549120878" 
             target="_blank"
             rel="noopener noreferrer"
             className="w-full sm:w-auto flex items-center justify-center gap-2 text-white/90 hover:text-blue-400 transition-colors duration-300 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm hover:bg-black/50"

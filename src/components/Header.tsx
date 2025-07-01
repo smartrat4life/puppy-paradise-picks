@@ -46,11 +46,11 @@ const Header = () => {
               {/* Logo */}
               <div className="flex items-center gap-3">
                 <img 
-                  src="/lovable-uploads/bd88e703-c689-4c38-8f0f-1048f3b8da46.png" 
+                  src="/images/logo/puppy-logo.png" 
                   alt="Pick a Puppy Logo" 
-                  className="w-10 h-10 object-contain"
+                  className="h-12 w-auto object-contain"
                 />
-                <h1 className="text-2xl font-bold text-white">Pick a Puppy</h1>
+                <h1 className="text-2xl font-bold text-amber-600">Pick a Puppy</h1>
               </div>
 
               {/* Desktop Search */}
@@ -77,10 +77,10 @@ const Header = () => {
 
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center space-x-6" role="navigation" aria-label="Main navigation">
-                <a href="#breeds" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                {/*<a href="#breeds" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Our Breeds
-                </a>
-                <a href="#about" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                </a>*/}
+                <a href="/about" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   About Us
                 </a>
                 <a href="#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">

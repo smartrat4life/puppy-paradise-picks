@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar, MapPin, Search, Filter } from 'lucide-react';
 import FavoriteButton from './FavoriteButton';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 
 const AvailablePuppies = () => {
   const { puppies, loading, error } = usePuppies();
@@ -148,10 +149,11 @@ const AvailablePuppies = () => {
             {filteredPuppies.map((puppy) => (
               <Card key={puppy.id} className="group overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 hover:border-teal-300">
                 <div className="relative overflow-hidden">
-                  <img 
-                    src={puppy.image_url || 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80'} 
+                  <ImageWithFallback 
+                    src={puppy.image_url || 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80'}
                     alt={`${puppy.name} - ${puppy.breed} puppy`}
                     className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    containerClassName="w-full h-64"
                   />
                   <div className="absolute top-4 right-4 flex gap-2">
                     <FavoriteButton puppyId={puppy.id} />

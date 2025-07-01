@@ -7,37 +7,37 @@ const BreedsSection = () => {
     {
       name: "ShihTzu",
       description: "Friendly, outgoing, and affectionate companions known for their beautiful coats and loving nature.",
-      image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800&q=80",
+      image: "images/breeds/ShihTzu.jpg",
       traits: ["Friendly", "Outgoing", "Low Shedding"]
     },
     {
       name: "Doberman",
       description: "Intelligent, loyal, and fearless protectors with elegant athleticism and unwavering devotion.",
-      image: "https://images.unsplash.com/photo-1551717743-49959800b1f6?w=800&q=80",
+      image: "images/breeds/Doberman.jpg",
       traits: ["Intelligent", "Loyal", "Protective"]
     },
     {
       name: "Cavapoo",
       description: "Sweet-natured, intelligent, and hypoallergenic crosses that make perfect family companions.",
-      image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80",
+      image: "images/breeds/Cavapoo.jpg",
       traits: ["Sweet", "Hypoallergenic", "Family-Friendly"]
     },
     {
       name: "GoldenDoodle",
       description: "Gentle, intelligent, and playful hybrids combining the best of Golden Retrievers and Poodles.",
-      image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80",
+      image: "images/breeds/GoldenDoodle.jpg",
       traits: ["Gentle", "Intelligent", "Playful"]
     },
     {
       name: "Chihuahua",
       description: "Bold, confident, and charming small dogs with big personalities and fierce loyalty.",
-      image: "https://images.unsplash.com/photo-1444212477490-ca407925329e?w=800&q=80",
+      image: "images/breeds/Chihuahua.jpg",
       traits: ["Bold", "Confident", "Loyal"]
     },
     {
       name: "Dachshund",
       description: "Clever, lively, and courageous with distinctive long bodies and playful personalities.",
-      image: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=800&q=80",
+      image: "images/breeds/Dachshund.jpg",
       traits: ["Clever", "Lively", "Courageous"]
     }
   ];

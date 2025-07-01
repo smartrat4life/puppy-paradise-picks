@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 
 interface Breed {
   name: string;
@@ -31,10 +32,11 @@ const BreedCard = ({ breed, index }: BreedCardProps) => {
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
-          <img 
+          <ImageWithFallback 
             src={breed.image} 
             alt={breed.name}
             className="w-full h-full object-cover"
+            containerClassName="w-full h-full"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </motion.div>

@@ -13,6 +13,7 @@ import Favorites from "./pages/Favorites";
 import Testimonials from "./pages/Testimonials";
 import Pricing from "./pages/Pricing";
 import FAQ from "./pages/FAQ";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const AnimatedRoutes = () => {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Index />} />
+        <Route path="/about" element={<About />} />
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/faq" element={<FAQ />} />
