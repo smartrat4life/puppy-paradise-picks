@@ -70,7 +70,7 @@ const AvailablePuppies = () => {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as const,
         staggerChildren: 0.1,
       }
     }
@@ -84,7 +84,7 @@ const AvailablePuppies = () => {
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as const,
       }
     }
   };
@@ -260,7 +260,7 @@ const AvailablePuppies = () => {
             className="text-4xl md:text-5xl font-bold text-amber-900 mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
           >
             Available Puppies
           </motion.h2>
