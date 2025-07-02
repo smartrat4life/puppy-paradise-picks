@@ -1,5 +1,4 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePuppies } from '@/hooks/usePuppies';
 import { usePagination } from '@/hooks/usePagination';
@@ -46,10 +45,36 @@ const AvailablePuppies = () => {
     itemsPerPage: 6,
   });
 
-  // Reset pagination when filters change
+  // Use a ref to track the previous filter state to avoid unnecessary resets
+  const prevFiltersRef = useRef({
+    searchTerm,
+    selectedBreed,
+    selectedGender,
+    minPrice,
+    maxPrice,
+    minWeeks,
+    maxWeeks,
+  });
+
+  // Reset pagination only when filters actually change, not when length changes
   useEffect(() => {
-    reset();
-  }, [filteredPuppies.length, reset]);
+    const currentFilters = {
+      searchTerm,
+      selectedBreed,
+      selectedGender,
+      minPrice,
+      maxPrice,
+      minWeeks,
+      maxWeeks,
+    };
+
+    const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(currentFilters);
+    
+    if (filtersChanged) {
+      reset();
+      prevFiltersRef.current = currentFilters;
+    }
+  }, [searchTerm, selectedBreed, selectedGender, minPrice, maxPrice, minWeeks, maxWeeks, reset]);
 
   // Enhanced animation variants
   const containerVariants = {
