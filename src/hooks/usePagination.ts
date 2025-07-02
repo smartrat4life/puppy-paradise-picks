@@ -10,9 +10,9 @@ export const usePagination = <T>({ items, itemsPerPage }: UsePaginationProps<T>)
   const [currentPage, setCurrentPage] = useState(1);
 
   const paginatedItems = useMemo(() => {
-    const startIndex = 0;
+    // Show all items from start up to current page * itemsPerPage
     const endIndex = currentPage * itemsPerPage;
-    return items.slice(startIndex, endIndex);
+    return items.slice(0, endIndex);
   }, [items, currentPage, itemsPerPage]);
 
   const hasMoreItems = useMemo(() => {
