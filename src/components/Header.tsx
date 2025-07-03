@@ -1,9 +1,12 @@
+
 import React, { useState } from 'react';
 import { Menu, X, User, LogOut, Search, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
+import { Link } from 'react-router-dom';
 import AuthModal from '@/components/AuthModal';
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -13,6 +16,7 @@ const Header = () => {
     signOut,
     isAdmin
   } = useAuth();
+
   const handleAuthClick = async () => {
     if (user) {
       try {
@@ -24,6 +28,7 @@ const Header = () => {
       setIsAuthModalOpen(true);
     }
   };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -40,6 +45,7 @@ const Header = () => {
       }
     }
   };
+
   return <>
       <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-6xl" role="banner">
         <div className="bg-black/70 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl">
@@ -63,31 +69,28 @@ const Header = () => {
 
               {/* Desktop Navigation */}
               <nav className="hidden md:flex items-center space-x-6" role="navigation" aria-label="Main navigation">
-                {/*<a href="#breeds" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
-                  Our Breeds
-                 </a>*/}
-                <a href="/about" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                <Link to="/about" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   About Us
-                </a>
-                <a href="#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                </Link>
+                <a href="/#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Available Puppies
                 </a>
-                <a href="/testimonials" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
-                  Testimonials
-                </a>
-                <a href="/pricing" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                <Link to="/reviews" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                  Reviews
+                </Link>
+                <Link to="/pricing" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Pricing
-                </a>
-                <a href="/faq" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                </Link>
+                <Link to="/faq" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   FAQ
-                </a>
-                {user && <a href="/favorites" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium flex items-center gap-1">
+                </Link>
+                {user && <Link to="/favorites" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium flex items-center gap-1">
                     <Heart className="w-4 h-4" />
                     Favorites
-                  </a>}
-                {isAdmin && <a href="/admin" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                  </Link>}
+                {isAdmin && <Link to="/admin" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Admin
-                  </a>}
+                  </Link>}
               </nav>
 
               {/* Auth Buttons */}
@@ -125,28 +128,28 @@ const Header = () => {
                     </Button>
                   </form>
                   
-                  <a href="#breeds" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
-                    Our Breeds
-                  </a>
-                  <a href="#about" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                  <Link to="/about" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     About Us
-                  </a>
-                  <a href="#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                  </Link>
+                  <a href="/#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Available Puppies
                   </a>
-                  <a href="#testimonials" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                  <Link to="/reviews" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Reviews
-                  </a>
-                  <a href="#contact" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
-                    Contact
-                  </a>
-                  {user && <a href="/favorites" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium flex items-center gap-1">
+                  </Link>
+                  <Link to="/pricing" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                    Pricing
+                  </Link>
+                  <Link to="/faq" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                    FAQ
+                  </Link>
+                  {user && <Link to="/favorites" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium flex items-center gap-1">
                       <Heart className="w-4 h-4" />
                       Favorites
-                    </a>}
-                  {isAdmin && <a href="/admin" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                    </Link>}
+                  {isAdmin && <Link to="/admin" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                       Admin
-                    </a>}
+                    </Link>}
                   <div className="pt-2 border-t border-white/10">
                     <Button onClick={handleAuthClick} className="w-full bg-black/70 hover:bg-black/80 text-white border border-white/10 py-2 rounded-lg font-semibold transition-all duration-300" aria-label={user ? 'Logout' : 'Login or Sign up'}>
                       {user ? <>
@@ -167,4 +170,5 @@ const Header = () => {
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </>;
 };
+
 export default Header;

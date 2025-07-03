@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +12,7 @@ import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import Favorites from "./pages/Favorites";
 import Testimonials from "./pages/Testimonials";
+import Reviews from "./pages/Reviews";
 import Pricing from "./pages/Pricing";
 import FAQ from "./pages/FAQ";
 import About from "./pages/About";
@@ -27,6 +29,7 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<Index />} />
         <Route path="/about" element={<About />} />
         <Route path="/testimonials" element={<Testimonials />} />
+        <Route path="/reviews" element={<Reviews />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/admin" element={<Admin />} />
