@@ -8,7 +8,7 @@ import { usePuppies } from '@/hooks/usePuppies';
 import { Puppy } from '@/services/puppyService';
 
 const PuppySpotlight = () => {
-  const { puppies, loading } = usePuppies();
+  const { puppies, loading, error } = usePuppies();
   const [currentPuppyIndex, setCurrentPuppyIndex] = useState(0);
   const [featuredPuppy, setFeaturedPuppy] = useState<Puppy | null>(null);
 
@@ -42,11 +42,17 @@ const PuppySpotlight = () => {
   };
 
   const scrollToAvailable = () => {
-    document.getElementById('available')?.scrollIntoView({ behavior: 'smooth' });
+    const element = document.getElementById('available');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    const element = document.getElementById('contact');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   if (loading || !featuredPuppy || availablePuppies.length === 0) {
@@ -58,6 +64,18 @@ const PuppySpotlight = () => {
               <div className="h-8 bg-gray-300 rounded w-64 mx-auto mb-4"></div>
               <div className="h-4 bg-gray-300 rounded w-96 mx-auto"></div>
             </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-gradient-to-br from-teal-50 to-amber-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center">
+            <p className="text-amber-700">Unable to load puppy spotlight at this time.</p>
           </div>
         </div>
       </section>
@@ -172,6 +190,10 @@ const PuppySpotlight = () => {
                 src={featuredPuppy.image_url || 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80'} 
                 alt={featuredPuppy.name}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80';
+                }}
               />
               <motion.div 
                 className="absolute top-4 left-4"
