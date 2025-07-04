@@ -1,26 +1,44 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Heart, Award, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { usePuppies } from '@/hooks/usePuppies';
+import { Puppy } from '@/services/puppyService';
 
 const PuppySpotlight = () => {
-  const featuredPuppy = {
-    id: 'spotlight-1',
-    name: 'Bella',
-    breed: 'Golden Retriever',
-    age: '12 weeks',
-    price: 2500,
-    image: 'https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=800&q=80',
-    description: 'Meet Bella, our adorable Golden Retriever puppy! She\'s playful, loving, and ready to become your best friend. Bella has been health checked, vaccinated, and comes with full AKC registration.',
-    highlights: [
-      'AKC Registered',
-      'Health Guarantee',
-      'Fully Vaccinated',
-      'Microchipped'
-    ],
-    personality: ['Playful', 'Gentle', 'Intelligent', 'Loyal']
+  const { puppies, loading } = usePuppies();
+  const [currentPuppyIndex, setCurrentPuppyIndex] = useState(0);
+  const [featuredPuppy, setFeaturedPuppy] = useState<Puppy | null>(null);
+
+  // Filter available puppies
+  const availablePuppies = puppies.filter(puppy => puppy.status === 'available');
+
+  // Set up rotation every 5 seconds
+  useEffect(() => {
+    if (availablePuppies.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentPuppyIndex(prev => (prev + 1) % availablePuppies.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [availablePuppies.length]);
+
+  // Update featured puppy when index changes
+  useEffect(() => {
+    if (availablePuppies.length > 0) {
+      setFeaturedPuppy(availablePuppies[currentPuppyIndex]);
+    }
+  }, [currentPuppyIndex, availablePuppies]);
+
+  const calculateAge = (birthDate: string) => {
+    const birth = new Date(birthDate);
+    const now = new Date();
+    const ageInMs = now.getTime() - birth.getTime();
+    const ageInWeeks = Math.floor(ageInMs / (1000 * 60 * 60 * 24 * 7));
+    return ageInWeeks;
   };
 
   const scrollToAvailable = () => {
@@ -30,6 +48,30 @@ const PuppySpotlight = () => {
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  if (loading || !featuredPuppy || availablePuppies.length === 0) {
+    return (
+      <section className="py-20 bg-gradient-to-br from-teal-50 to-amber-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center">
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-300 rounded w-64 mx-auto mb-4"></div>
+              <div className="h-4 bg-gray-300 rounded w-96 mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const ageInWeeks = calculateAge(featuredPuppy.birth_date);
+  const highlights = [
+    'AKC Registered',
+    'Health Guarantee', 
+    'Fully Vaccinated',
+    'Microchipped'
+  ];
+  const personality = ['Playful', 'Gentle', 'Intelligent', 'Loyal'];
 
   return (
     <section className="py-20 bg-gradient-to-br from-teal-50 to-amber-50 relative overflow-hidden">
@@ -91,13 +133,33 @@ const PuppySpotlight = () => {
           >
             Meet our special featured puppy, carefully selected for their exceptional temperament and charm
           </motion.p>
+          
+          {/* Rotation indicator */}
+          {availablePuppies.length > 1 && (
+            <motion.div 
+              className="flex justify-center gap-2 mt-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              {availablePuppies.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                    index === currentPuppyIndex ? 'bg-teal-600' : 'bg-teal-300'
+                  }`}
+                />
+              ))}
+            </motion.div>
+          )}
         </motion.div>
 
         <motion.div 
           className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden"
+          key={featuredPuppy.id}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.8 }}
+          transition={{ duration: 0.8 }}
         >
           <div className="grid lg:grid-cols-2 gap-0">
             {/* Image Section */}
@@ -107,7 +169,7 @@ const PuppySpotlight = () => {
               transition={{ duration: 0.3 }}
             >
               <img 
-                src={featuredPuppy.image} 
+                src={featuredPuppy.image_url || 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80'} 
                 alt={featuredPuppy.name}
                 className="w-full h-full object-cover"
               />
@@ -115,7 +177,7 @@ const PuppySpotlight = () => {
                 className="absolute top-4 left-4"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: 0.8, type: "spring" }}
+                transition={{ delay: 0.2, type: "spring" }}
               >
                 <Badge className="bg-teal-600 text-white px-3 py-1 text-sm font-semibold">
                   Featured
@@ -135,7 +197,7 @@ const PuppySpotlight = () => {
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: 0.3 }}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <h3 className="text-3xl font-bold text-amber-900">{featuredPuppy.name}</h3>
@@ -147,7 +209,7 @@ const PuppySpotlight = () => {
                 <div className="flex items-center gap-4 mb-6 text-amber-700">
                   <div className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
-                    <span>{featuredPuppy.age} old</span>
+                    <span>{ageInWeeks} week{ageInWeeks !== 1 ? 's' : ''} old</span>
                   </div>
                   <div className="text-2xl font-bold text-teal-600">
                     ${featuredPuppy.price.toLocaleString()}
@@ -155,7 +217,7 @@ const PuppySpotlight = () => {
                 </div>
 
                 <p className="text-gray-600 mb-6 leading-relaxed">
-                  {featuredPuppy.description}
+                  {featuredPuppy.description || `Meet ${featuredPuppy.name}, our adorable ${featuredPuppy.breed} puppy! ${featuredPuppy.gender === 'male' ? 'He' : 'She'}'s playful, loving, and ready to become your best friend. ${featuredPuppy.name} has been health checked, vaccinated, and comes with full care documentation.`}
                 </p>
 
                 {/* Highlights */}
@@ -165,13 +227,13 @@ const PuppySpotlight = () => {
                     What Makes {featuredPuppy.name} Special
                   </h4>
                   <div className="grid grid-cols-2 gap-2">
-                    {featuredPuppy.highlights.map((highlight, index) => (
+                    {highlights.map((highlight, index) => (
                       <motion.div
                         key={highlight}
                         className="flex items-center gap-2 text-sm text-gray-600"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.8 + index * 0.1 }}
+                        transition={{ delay: 0.5 + index * 0.1 }}
                       >
                         <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
                         {highlight}
@@ -184,13 +246,13 @@ const PuppySpotlight = () => {
                 <div className="mb-8">
                   <h4 className="font-semibold text-amber-900 mb-3">Personality</h4>
                   <div className="flex flex-wrap gap-2">
-                    {featuredPuppy.personality.map((trait, index) => (
+                    {personality.map((trait, index) => (
                       <motion.span
                         key={trait}
                         className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-medium"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ delay: 1 + index * 0.1, type: "spring" }}
+                        transition={{ delay: 0.7 + index * 0.1, type: "spring" }}
                       >
                         {trait}
                       </motion.span>
@@ -203,7 +265,7 @@ const PuppySpotlight = () => {
                   className="flex flex-col sm:flex-row gap-4"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2 }}
+                  transition={{ delay: 0.9 }}
                 >
                   <Button 
                     onClick={scrollToContact}
