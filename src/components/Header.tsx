@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X, User, LogOut, Search, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,11 +11,37 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  
   const {
     user,
     signOut,
     isAdmin
   } = useAuth();
+
+  // Handle scroll to show/hide navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY < 100) {
+        // Always show navbar when near top
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Hide navbar when scrolling down
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        // Show navbar when scrolling up
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const handleAuthClick = async () => {
     if (user) {
@@ -47,7 +73,12 @@ const Header = () => {
   };
 
   return <>
-      <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-6xl" role="banner">
+      <header 
+        className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-6xl transition-all duration-300 ${
+          isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        }`}
+        role="banner"
+      >
         <div className="bg-black/70 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl">
           <div className="container mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
@@ -75,7 +106,7 @@ const Header = () => {
                 <a href="/#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Available Puppies
                 </a>
-                <Link to="/reviews" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                <Link to="/testimonials" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                   Reviews
                 </Link>
                 <Link to="/pricing" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
@@ -134,7 +165,7 @@ const Header = () => {
                   <a href="/#available" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Available Puppies
                   </a>
-                  <Link to="/reviews" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
+                  <Link to="/testimonials" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
                     Reviews
                   </Link>
                   <Link to="/pricing" className="text-white hover:text-teal-300 transition-colors duration-200 font-medium">
