@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -107,6 +106,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           full_name: fullName,
         },
         emailRedirectTo: `${window.location.origin}/`,
+        // Disable captcha for email/password signup
+        captchaToken: undefined
       },
     });
     
@@ -117,6 +118,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: {
+        // Disable captcha for email/password signin
+        captchaToken: undefined
+      }
     });
     
     return { error };
