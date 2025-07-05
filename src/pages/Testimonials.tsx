@@ -5,13 +5,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star, Quote, Heart } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import PawIcon from '../components/PawIcon';
 
 const testimonials = [
   {
     id: 1,
     name: 'Sarah Johnson',
     location: 'Portland, OR',
-    image: '/testimonials/puppy1.jpg',
+    image: '',
     date: 'June 2024',
     rating: 5,
     puppy: 'Golden Doodle - Max',
@@ -41,7 +42,7 @@ const testimonials = [
     id: 4,
     name: 'David & Emma Wilson',
     location: 'Austin, TX',
-    image: '/testimonials/puppy1.jpg',
+    image: '',
     date: 'March 2024',
     rating: 5,
     puppy: 'Doberman - Duke',
@@ -146,9 +147,9 @@ const Testimonials = () => {
                     </div>
                     <div className="flex items-center space-x-4">
                       <Avatar>
-                        <AvatarFallback className="bg-teal-600 text-white">
-                          {testimonial.name[0]}
-                        </AvatarFallback>
+                        <div className="w-full h-full flex items-center justify-center bg-amber-100">
+                          <PawIcon className="w-6 h-6 text-amber-700" />
+                        </div>
                       </Avatar>
                       <div>
                         <h3 className="font-semibold text-amber-900 group-hover:text-teal-700 transition-colors duration-300">

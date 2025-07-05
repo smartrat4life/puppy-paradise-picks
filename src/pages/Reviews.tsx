@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Star, Quote, Heart, MapPin, Calendar } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import PawIcon from '../components/PawIcon';
 
 const Reviews = () => {
   const reviews = [
@@ -15,7 +16,7 @@ const Reviews = () => {
       adoptionDate: "March 2024",
       rating: 5,
       story: "Our experience with Pick a Puppy was absolutely wonderful from start to finish! Charlie has brought so much joy to our family. The breeder was incredibly knowledgeable and supportive throughout the entire process. Charlie came home perfectly socialized, healthy, and well-adjusted. He's now 6 months old and the perfect addition to our family. We couldn't be happier!",
-      ownerImage: "https://images.unsplash.com/photo-1494790108755-2616b612b587?w=150&q=80",
+      ownerImage: "",
       puppyThenImage: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80",
       puppyNowImage: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80",
       featured: true
@@ -160,11 +161,9 @@ const Reviews = () => {
                         </p>
                         
                         <div className="flex items-center">
-                          <img 
-                            src={review.ownerImage} 
-                            alt={review.name}
-                            className="w-16 h-16 rounded-full object-cover mr-4"
-                          />
+                          <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center border-2 border-amber-200">
+                            <PawIcon className="w-8 h-8 text-amber-700" />
+                          </div>
                           <div>
                             <h4 className="font-bold text-amber-900 text-lg">
                               {review.name}

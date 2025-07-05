@@ -2,6 +2,8 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star, Quote } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import PawIcon from './PawIcon';
 
 const TestimonialsSection = () => {
   const testimonials = [
@@ -11,7 +13,7 @@ const TestimonialsSection = () => {
       puppy: "Golden Doodle - Charlie",
       rating: 5,
       text: "Our experience with Pick a Puppy was absolutely wonderful! Charlie is the most well-behaved and loving dog. The breeder's expertise really shows in how well-socialized he is.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80"
+      image: ""
     },
     {
       name: "Mike & Lisa Chen",
@@ -19,7 +21,7 @@ const TestimonialsSection = () => {
       puppy: "Cavapoo - Mia",
       rating: 5,
       text: "We couldn't be happier with our Cavapoo! She's hypoallergenic as promised and has the sweetest temperament. The health guarantee gave us such peace of mind.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80"
+      image: ""
     },
     {
       name: "Jennifer Martinez",
@@ -62,11 +64,9 @@ const TestimonialsSection = () => {
                 </p>
                 
                 <div className="flex items-center">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover mr-4"
-                  />
+                  <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mr-4">
+                    <PawIcon className="w-6 h-6 text-amber-700" />
+                  </div>
                   <div>
                     <h4 className="font-bold text-amber-900 group-hover:text-teal-700 transition-colors duration-300">
                       {testimonial.name}
@@ -78,6 +78,15 @@ const TestimonialsSection = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+        
+        <div className="text-center mt-12">
+          <Link 
+            to="/testimonials"
+            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-teal-600 hover:bg-teal-700 md:py-4 md:text-lg md:px-10 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-teal-500/20"
+          >
+            See More Testimonials
+          </Link>
         </div>
       </div>
     </section>
