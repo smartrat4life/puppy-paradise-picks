@@ -10,42 +10,42 @@ const Pricing = () => {
   const breedPricing = [
     {
       breed: "Golden Doodle",
-      price: "$1,200 - $1,500",
+      price: "$800 - $4500",
       deposit: "$300 - $400",
       description: "Hypoallergenic, intelligent, and family-friendly companions",
       features: ["F1 & F1B Available", "Health Tested Parents", "Non-Shedding Coat"]
     },
     {
       breed: "ShihTzu",
-      price: "$900 - $1,100",
+      price: "$600 - $3000",
       deposit: "$250 - $300",
       description: "Loving, outgoing, and beautiful companion dogs",
       features: ["Champion Bloodlines", "Luxurious Coat", "Great with Kids"]
     },
     {
       breed: "Cavapoo",
-      price: "$1,100 - $1,300",
+      price: "$800 - $4500",
       deposit: "$275 - $350",
       description: "Sweet-natured, hypoallergenic family pets",
       features: ["Hypoallergenic", "Gentle Temperament", "Easy to Train"]
     },
     {
       breed: "Doberman",
-      price: "$1,500 - $2,000",
+      price: "$1,500 - $5000",
       deposit: "$400 - $500",
       description: "Loyal, intelligent, and protective guardians",
       features: ["European Bloodlines", "Protection Trained", "Health Certified"]
     },
     {
       breed: "Chihuahua",
-      price: "$700 - $900",
+      price: "$700 - $3500",
       deposit: "$175 - $225",
       description: "Bold, confident, and charming small companions",
       features: ["Tiny Size", "Big Personality", "Long Lifespan"]
     },
     {
       breed: "Dachshund",
-      price: "$800 - $1,000",
+      price: "$800 - $3800",
       deposit: "$200 - $250",
       description: "Clever, lively, and courageous sausage dogs",
       features: ["Standard & Miniature", "Various Colors", "Playful Nature"]
@@ -284,7 +284,7 @@ const Pricing = () => {
                         </li>
                         <li className="flex items-start gap-2">
                           <CheckCircle className="w-4 h-4 mt-1 text-green-500" />
-                          <span>Payment accepted: Cash, certified check, or bank transfer</span>
+                          <span>Payment accepted: Cash, gift cards, venmo, cash app, apple pay or bank transfer</span>
                         </li>
                       </ul>
                     </div>

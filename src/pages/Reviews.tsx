@@ -88,7 +88,7 @@ const Reviews = () => {
   ];
 
   const stats = [
-    { number: "150+", label: "Happy Families" },
+    { number: "500+", label: "Happy Families" },
     { number: "13", label: "Years Experience" },
     { number: "6", label: "Premium Breeds" },
     { number: "100%", label: "Health Guaranteed" }

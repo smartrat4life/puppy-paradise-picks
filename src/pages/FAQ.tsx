@@ -77,7 +77,7 @@ const FAQ = () => {
         },
         {
           question: "What payment methods do you accept?",
-          answer: "We accept cash, certified checks, money orders, and bank transfers. For deposits, we also accept PayPal and Venmo. Credit cards are not accepted for final payments due to processing fees, but we're happy to work with you on payment timing if needed."
+          answer: "We accept cash, certified checks, money orders, and bank transfers. For deposits, we also accept Gift Cards, Cash app, PayPal and Venmo. Credit cards are not accepted for final payments due to processing fees, but we're happy to work with you on payment timing if needed."
         }
       ]
     },
@@ -196,13 +196,13 @@ const FAQ = () => {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <a 
-                      href="tel:+15551234567"
+                      href="tel:+0001234567"
                       className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-full font-semibold transition-colors duration-300"
                     >
-                      Call Us: (555) 123-4567
+                      Call Us: (000) 123-4567
                     </a>
                     <a 
-                      href="mailto:info@pickapuppy.com"
+                      href="mailto:pickapuppy@gmail.com"
                       className="border-2 border-teal-600 text-teal-700 hover:bg-teal-600 hover:text-white px-6 py-3 rounded-full font-semibold transition-all duration-300"
                     >
                       Email Us
