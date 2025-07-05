@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 const AuthSuccess = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(30);
   
   const action = searchParams.get('action') || 'signin';
   const isSignUp = action === 'signup';
