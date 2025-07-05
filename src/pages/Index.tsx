@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
@@ -9,6 +8,7 @@ import TrustBadges from '../components/TrustBadges';
 import TestimonialsSection from '../components/TestimonialsSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
+import PuppySpotlight from '../components/PuppySpotlight';
 
 const Index = () => {
   return (
@@ -17,6 +17,7 @@ const Index = () => {
       <Hero />
       <BreedsSection />
       <AboutSection />
+      <PuppySpotlight />
       <AvailablePuppies />
       <TrustBadges />
       <TestimonialsSection />
