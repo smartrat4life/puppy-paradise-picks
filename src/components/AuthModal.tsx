@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -96,7 +97,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth-success?action=signin`
+          redirectTo: 'https://pickapuppy.netlify.app/auth-success?action=signin'
         }
       });
       
@@ -120,7 +121,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'facebook',
         options: {
-          redirectTo: `${window.location.origin}/auth-success?action=signin`
+          redirectTo: 'https://pickapuppy.netlify.app/auth-success?action=signin'
         }
       });
       
@@ -182,11 +183,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         resetForm();
       }
     }}>
-      <DialogContent className="sm:max-w-md" role="dialog" aria-labelledby="auth-modal-title">
+      <DialogContent className="sm:max-w-md" role="dialog" aria-describedby="auth-modal-description">
         <DialogHeader>
-          <DialogTitle id="auth-modal-title" className="text-center text-2xl font-bold text-amber-900">
+          <DialogTitle className="text-center text-2xl font-bold text-amber-900">
             Welcome to Pick a Puppy
           </DialogTitle>
+          <DialogDescription id="auth-modal-description" className="text-center text-amber-700">
+            Sign in to your account or create a new one to start finding your perfect puppy companion.
+          </DialogDescription>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -447,7 +451,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
         {error && (
           <Alert variant="destructive" role="alert">
-            <AlertDescription id="error-message">{error}</AlertDescription>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
