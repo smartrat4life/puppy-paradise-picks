@@ -9,7 +9,10 @@ const AuthRedirectHandler = () => {
 
   useEffect(() => {
     const handleAuthCallback = async () => {
+      console.log('Auth callback triggered with search params:', Object.fromEntries(searchParams));
+      
       try {
+        // Handle the OAuth callback
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -19,10 +22,12 @@ const AuthRedirectHandler = () => {
         }
 
         if (data.session) {
+          console.log('Successfully authenticated:', data.session.user.email);
           // Successfully authenticated, redirect to success page
           const action = searchParams.get('action') || 'signin';
           navigate(`/auth-success?action=${action}`, { replace: true });
         } else {
+          console.log('No session found, redirecting to home');
           // No session found, redirect to home
           navigate('/', { replace: true });
         }
@@ -34,11 +39,10 @@ const AuthRedirectHandler = () => {
 
     // Check if this is an auth callback (has code parameter)
     if (searchParams.has('code')) {
+      console.log('OAuth code detected, handling auth callback');
       handleAuthCallback();
     } else {
-      // Not an auth callback, proceed normally
-      const action = searchParams.get('action') || 'signin';
-      // Page will render normally
+      console.log('No OAuth code found, normal page load');
     }
   }, [navigate, searchParams]);
 
