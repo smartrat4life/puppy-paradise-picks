@@ -16,6 +16,7 @@ import Reviews from "./pages/Reviews";
 import Pricing from "./pages/Pricing";
 import FAQ from "./pages/FAQ";
 import About from "./pages/About";
+import AuthSuccess from "./pages/AuthSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const AnimatedRoutes = () => {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/auth-success" element={<AuthSuccess />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

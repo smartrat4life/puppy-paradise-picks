@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -9,6 +8,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Eye, EyeOff, Mail } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -16,6 +16,7 @@ interface AuthModalProps {
 }
 
 const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -40,6 +41,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         setError(error.message || 'Failed to sign in');
       } else {
         onClose();
+        navigate('/auth-success?action=signin');
         setEmail('');
         setPassword('');
       }
@@ -72,7 +74,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       if (error) {
         setError(error.message || 'Failed to sign up');
       } else {
-        setSuccess('Account created successfully! Please check your email to verify your account.');
+        onClose();
+        navigate('/auth-success?action=signup');
         setEmail('');
         setPassword('');
         setFullName('');
@@ -93,12 +96,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/`
+          redirectTo: `${window.location.origin}/auth-success?action=signin`
         }
       });
       
       if (error) {
         setError(error.message);
+      } else {
+        onClose();
       }
     } catch (err) {
       setError('Failed to sign in with Google');
@@ -115,12 +120,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'facebook',
         options: {
-          redirectTo: `${window.location.origin}/`
+          redirectTo: `${window.location.origin}/auth-success?action=signin`
         }
       });
       
       if (error) {
         setError(error.message);
+      } else {
+        onClose();
       }
     } catch (err) {
       setError('Failed to sign in with Facebook');
