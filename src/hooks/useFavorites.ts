@@ -40,10 +40,10 @@ export const useFavorites = () => {
     if (!user) {
       toast({
         title: "Authentication Required",
-        description: "Please log in to add favorites",
+        description: "Please sign in to add favorites",
         variant: "destructive",
       });
-      return;
+      throw new Error('User not authenticated');
     }
 
     try {
@@ -62,11 +62,19 @@ export const useFavorites = () => {
         description: errorMessage,
         variant: "destructive",
       });
+      throw err;
     }
   };
 
   const removeFromFavorites = async (puppyId: string) => {
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: "Authentication Required", 
+        description: "Please sign in to manage favorites",
+        variant: "destructive",
+      });
+      throw new Error('User not authenticated');
+    }
 
     try {
       console.log('Removing from favorites:', { userId: user.id, puppyId });
@@ -84,6 +92,7 @@ export const useFavorites = () => {
         description: errorMessage,
         variant: "destructive",
       });
+      throw err;
     }
   };
 

@@ -4,6 +4,7 @@ import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useAuth } from '@/contexts/AuthContext';
+import AuthModal from './AuthModal';
 
 interface FavoriteButtonProps {
   puppyId: string;
@@ -13,6 +14,7 @@ interface FavoriteButtonProps {
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = "" }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const { user } = useAuth();
 
@@ -26,6 +28,8 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
           console.error('Error checking favorite status:', error);
           setIsFavorited(false);
         }
+      } else {
+        setIsFavorited(false);
       }
     };
     checkFavoriteStatus();
@@ -35,7 +39,13 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
     e.preventDefault();
     e.stopPropagation();
     
-    if (!user || loading) {
+    // Check if user is authenticated
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    if (loading) {
       return;
     }
 
@@ -55,26 +65,31 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
     }
   };
 
-  if (!user) {
-    return null;
-  }
-
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      onClick={handleToggleFavorite}
-      disabled={loading}
-      className={`p-2 hover:bg-white/20 ${className}`}
-    >
-      <Heart 
-        className={`w-5 h-5 transition-colors ${
-          isFavorited 
-            ? 'fill-red-500 text-red-500' 
-            : 'text-white hover:text-red-300'
-        }`}
+    <>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handleToggleFavorite}
+        disabled={loading}
+        className={`p-2 hover:bg-white/20 ${className}`}
+        title={user ? (isFavorited ? 'Remove from favorites' : 'Add to favorites') : 'Sign in to add favorites'}
+      >
+        <Heart 
+          className={`w-5 h-5 transition-colors ${
+            isFavorited 
+              ? 'fill-red-500 text-red-500' 
+              : 'text-white hover:text-red-300'
+          }`}
+        />
+      </Button>
+      
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)}
+        defaultTab="signin"
       />
-    </Button>
+    </>
   );
 };
 
