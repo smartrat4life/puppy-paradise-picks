@@ -80,8 +80,9 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
         size="sm"
         onClick={handleToggleFavorite}
         disabled={loading}
-        className={`p-2 hover:bg-white/20 border-2 border-white/30 backdrop-blur-sm ${className}`}
+        className={`relative z-10 p-2 hover:bg-white/20 border-2 border-white/30 backdrop-blur-sm pointer-events-auto ${className}`}
         title={user ? (isFavorited ? 'Remove from favorites' : 'Add to favorites') : 'Sign in to add favorites'}
+        style={{ pointerEvents: 'auto' }}
       >
         <Heart 
           className={`w-6 h-6 transition-all duration-200 ${

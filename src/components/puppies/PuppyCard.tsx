@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
@@ -48,27 +47,26 @@ const PuppyCard: React.FC<PuppyCardProps> = ({ puppy, ageInWeeks, onInquire, ind
           />
           
           {/* Floating elements with stagger animation */}
-          <motion.div 
-            className="absolute top-4 right-4 flex gap-2"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 + 0.3 }}
+          <div 
+            className="absolute top-4 right-4 flex gap-2 z-20"
+            style={{ pointerEvents: 'auto' }}
           >
-            <motion.div
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.9 }}
+            <div
+              className="pointer-events-auto"
+              onClick={(e) => e.stopPropagation()}
             >
               <FavoriteButton puppyId={puppy.id} />
-            </motion.div>
+            </div>
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              className="pointer-events-auto"
             >
               <Badge className={puppy.status === 'available' ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"}>
                 {puppy.status === 'available' ? 'Available' : 'Reserved'}
               </Badge>
             </motion.div>
-          </motion.div>
+          </div>
           
           <motion.div 
             className="absolute top-4 left-4"
