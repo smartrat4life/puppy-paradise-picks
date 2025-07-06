@@ -68,9 +68,9 @@ export class FavoritesService {
       .select('id')
       .eq('user_id', userId)
       .eq('puppy_id', puppyId)
-      .single();
+      .maybeSingle(); // Use maybeSingle instead of single to handle no results
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.error('Error checking favorite status:', error);
       return false;
     }

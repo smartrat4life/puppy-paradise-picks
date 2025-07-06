@@ -22,7 +22,9 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
     const checkFavoriteStatus = async () => {
       if (user) {
         try {
+          console.log('Checking favorite status for puppy:', puppyId, 'user:', user.id);
           const favoriteStatus = await isFavorite(puppyId);
+          console.log('Favorite status result:', favoriteStatus);
           setIsFavorited(favoriteStatus);
         } catch (error) {
           console.error('Error checking favorite status:', error);
@@ -39,22 +41,28 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
     e.preventDefault();
     e.stopPropagation();
     
+    console.log('Favorite button clicked - User:', user ? 'authenticated' : 'not authenticated');
+    
     // Check if user is authenticated
     if (!user) {
+      console.log('User not authenticated, showing auth modal');
       setShowAuthModal(true);
       return;
     }
 
     if (loading) {
+      console.log('Already loading, ignoring click');
       return;
     }
 
     setLoading(true);
     try {
       if (isFavorited) {
+        console.log('Removing from favorites');
         await removeFromFavorites(puppyId);
         setIsFavorited(false);
       } else {
+        console.log('Adding to favorites');
         await addToFavorites(puppyId);
         setIsFavorited(true);
       }
@@ -72,15 +80,16 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
         size="sm"
         onClick={handleToggleFavorite}
         disabled={loading}
-        className={`p-2 hover:bg-white/20 ${className}`}
+        className={`p-2 hover:bg-white/20 border-2 border-white/30 backdrop-blur-sm ${className}`}
         title={user ? (isFavorited ? 'Remove from favorites' : 'Add to favorites') : 'Sign in to add favorites'}
       >
         <Heart 
-          className={`w-5 h-5 transition-colors ${
+          className={`w-6 h-6 transition-all duration-200 ${
             isFavorited 
-              ? 'fill-red-500 text-red-500' 
-              : 'text-white hover:text-red-300'
+              ? 'fill-red-500 text-red-500 scale-110' 
+              : 'text-white fill-none hover:text-red-300 hover:scale-105'
           }`}
+          strokeWidth={2}
         />
       </Button>
       
