@@ -87,7 +87,6 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ puppyId, className = ""
       <AuthModal 
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)}
-        defaultTab="signin"
       />
     </>
   );
