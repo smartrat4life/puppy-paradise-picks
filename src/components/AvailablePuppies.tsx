@@ -42,7 +42,7 @@ const AvailablePuppies = () => {
     totalItems,
   } = usePagination({
     items: filteredPuppies,
-    itemsPerPage: 6,
+    itemsPerPage: 9,
   });
 
   // Use a ref to track the previous filter state to avoid unnecessary resets
@@ -245,7 +245,7 @@ const AvailablePuppies = () => {
   };
 
   return (
-    <section id="available" className="py-20 bg-gradient-to-br from-amber-50 to-orange-50 relative overflow-hidden">
+    <section id="available" className="py-16 bg-gradient-to-br from-amber-50 to-orange-50 relative overflow-hidden">
       {/* Animated background decorations */}
       <motion.div 
         className="absolute top-10 left-0 w-40 h-40 bg-gradient-to-r from-teal-200/10 to-amber-200/10 rounded-full blur-2xl"
@@ -274,15 +274,15 @@ const AvailablePuppies = () => {
         }}
       />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 relative z-10">
         <motion.div 
-          className="text-center mb-16"
+          className="text-center mb-12"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           <motion.h2 
-            className="text-4xl md:text-5xl font-bold text-amber-900 mb-6"
+            className="text-3xl md:text-4xl font-bold text-amber-900 mb-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
@@ -290,7 +290,7 @@ const AvailablePuppies = () => {
             Available Puppies
           </motion.h2>
           <motion.p 
-            className="text-xl text-amber-700 max-w-3xl mx-auto leading-relaxed"
+            className="text-lg text-amber-700 max-w-2xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -329,12 +329,12 @@ const AvailablePuppies = () => {
 
         {/* Results counter */}
         <motion.div 
-          className="text-center mb-8"
+          className="text-center mb-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          <p className="text-amber-700 font-medium">
+          <p className="text-amber-700 font-medium text-sm">
             Showing {showingItems} of {totalItems} puppies
           </p>
         </motion.div>
@@ -384,7 +384,7 @@ const AvailablePuppies = () => {
         ) : (
           <>
             <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
               variants={gridVariants}
               initial="hidden"
               animate="visible"
@@ -408,7 +408,7 @@ const AvailablePuppies = () => {
             {/* See More Button */}
             {hasMoreItems && (
               <motion.div 
-                className="flex justify-center mt-12"
+                className="flex justify-center mt-8"
                 variants={buttonVariants}
                 initial="hidden"
                 animate="visible"
@@ -420,7 +420,7 @@ const AvailablePuppies = () => {
                 >
                   <Button
                     onClick={loadMore}
-                    className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+                    className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white px-8 py-3 text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
                   >
                     <span className="flex items-center gap-3">
                       See More Puppies
