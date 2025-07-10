@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -11,9 +12,10 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   src,
   alt,
   className,
-  fallbackSrc = '/images/paw-placeholder.png', // Default fallback image
+  fallbackSrc = '/images/paw-placeholder.png',
   fallbackIcon,
   containerClassName,
+  style,
   ...props
 }) => {
   const [error, setError] = useState(false);
@@ -36,6 +38,7 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
           className,
           containerClassName
         )}
+        style={style}
       >
         {fallbackIcon || (
           <svg 
@@ -61,10 +64,11 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
       src={src}
       alt={alt || ''}
       className={cn(
-        'transition-opacity duration-300',
+        'transition-opacity duration-300 object-cover object-center',
         !imageLoaded && 'opacity-0',
         className
       )}
+      style={style}
       onError={handleError}
       onLoad={handleLoad}
       {...props}

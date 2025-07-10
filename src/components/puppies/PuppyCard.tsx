@@ -26,12 +26,22 @@ const PuppyCard: React.FC<PuppyCardProps> = ({ puppy, ageInWeeks, onInquire, ind
     ? puppy.description.substring(0, MAX_DESCRIPTION_LENGTH) + '...'
     : puppy.description;
 
-  const handleReadMore = () => {
+  const handleReadMore = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigate(`/puppy/${puppy.id}`);
+    // Scroll to top after navigation
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   };
 
-  const handleAdoptMe = () => {
+  const handleAdoptMe = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigate(`/puppy/${puppy.id}`);
+    // Scroll to top after navigation
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   };
 
   return (
@@ -61,8 +71,9 @@ const PuppyCard: React.FC<PuppyCardProps> = ({ puppy, ageInWeeks, onInquire, ind
           <ImageWithFallback 
             src={puppy.image_url || 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80'}
             alt={`${puppy.name} - ${puppy.breed} puppy`}
-            className="w-full h-32 sm:h-36 md:h-40 lg:h-44 object-cover transition-transform duration-300"
+            className="w-full h-32 sm:h-36 md:h-40 lg:h-44 object-cover object-center transition-transform duration-300"
             containerClassName="w-full h-32 sm:h-36 md:h-40 lg:h-44"
+            style={{ aspectRatio: '4/3' }}
           />
           
           {/* Floating elements */}
@@ -153,10 +164,7 @@ const PuppyCard: React.FC<PuppyCardProps> = ({ puppy, ageInWeeks, onInquire, ind
               <motion.p layout>{displayDescription}</motion.p>
               {shouldTruncate && (
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleReadMore();
-                  }}
+                  onClick={handleReadMore}
                   className="text-teal-600 hover:text-teal-700 font-medium text-xs mt-1 transition-colors duration-200"
                 >
                   Read More

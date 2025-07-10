@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, MapPin, Heart, Share2 } from 'lucide-react';
@@ -8,13 +8,18 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
-import PuppyCard from '@/components/puppies/PuppyCard';
+import PuppyGrid from '@/components/puppies/PuppyGrid';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const PuppyDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { puppies, loading } = usePuppies();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   const puppy = puppies.find(p => p.id === id);
   const similarPuppies = puppies.filter(p => p.id !== id && p.breed === puppy?.breed && p.status === 'available').slice(0, 3);
@@ -78,7 +83,15 @@ const PuppyDetails = () => {
         transition={{ duration: 0.6 }}
       >
         {/* Back Button */}
-        <Link to="/" className="inline-flex items-center mb-6 text-teal-600 hover:text-teal-700 transition-colors">
+        <Link 
+          to="/" 
+          className="inline-flex items-center mb-6 text-teal-600 hover:text-teal-700 transition-colors"
+          onClick={() => {
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
+          }}
+        >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Puppies
         </Link>
@@ -94,8 +107,9 @@ const PuppyDetails = () => {
             <ImageWithFallback
               src={puppy.image_url || 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80'}
               alt={`${puppy.name} - ${puppy.breed} puppy`}
-              className="w-full h-96 md:h-[500px] object-cover rounded-2xl shadow-xl"
+              className="w-full h-96 md:h-[500px] object-cover object-center rounded-2xl shadow-xl"
               containerClassName="w-full h-96 md:h-[500px] rounded-2xl overflow-hidden"
+              style={{ aspectRatio: '4/3' }}
             />
             
             {/* Floating Action Buttons */}
@@ -188,17 +202,11 @@ const PuppyDetails = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-amber-900 mb-6 text-center">
               Other {puppy.breed} Puppies
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {similarPuppies.map((similarPuppy, index) => (
-                <PuppyCard
-                  key={similarPuppy.id}
-                  puppy={similarPuppy}
-                  ageInWeeks={calculateAgeInWeeks(similarPuppy.birth_date)}
-                  onInquire={() => window.location.href = `/puppy/${similarPuppy.id}`}
-                  index={index}
-                />
-              ))}
-            </div>
+            <PuppyGrid
+              puppies={similarPuppies}
+              calculateAgeInWeeks={calculateAgeInWeeks}
+              onInquire={scrollToContact}
+            />
           </motion.div>
         )}
       </motion.div>
