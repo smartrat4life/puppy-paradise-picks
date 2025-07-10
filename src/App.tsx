@@ -17,6 +17,7 @@ import Pricing from "./pages/Pricing";
 import FAQ from "./pages/FAQ";
 import About from "./pages/About";
 import AuthSuccess from "./pages/AuthSuccess";
+import PuppyDetails from "./pages/PuppyDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const AnimatedRoutes = () => {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/puppy/:id" element={<PuppyDetails />} />
         <Route path="/auth-success" element={<AuthSuccess />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

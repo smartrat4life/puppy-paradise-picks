@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,13 +18,21 @@ interface PuppyCardProps {
 }
 
 const PuppyCard: React.FC<PuppyCardProps> = ({ puppy, ageInWeeks, onInquire, index = 0 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
   const MAX_DESCRIPTION_LENGTH = 80;
   
   const shouldTruncate = puppy.description && puppy.description.length > MAX_DESCRIPTION_LENGTH;
-  const displayDescription = shouldTruncate && !isExpanded 
+  const displayDescription = shouldTruncate 
     ? puppy.description.substring(0, MAX_DESCRIPTION_LENGTH) + '...'
     : puppy.description;
+
+  const handleReadMore = () => {
+    navigate(`/puppy/${puppy.id}`);
+  };
+
+  const handleAdoptMe = () => {
+    navigate(`/puppy/${puppy.id}`);
+  };
 
   return (
     <motion.div
@@ -146,11 +155,11 @@ const PuppyCard: React.FC<PuppyCardProps> = ({ puppy, ageInWeeks, onInquire, ind
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setIsExpanded(!isExpanded);
+                    handleReadMore();
                   }}
                   className="text-teal-600 hover:text-teal-700 font-medium text-xs mt-1 transition-colors duration-200"
                 >
-                  {isExpanded ? 'Read Less' : 'Read More'}
+                  Read More
                 </button>
               )}
             </motion.div>
@@ -169,11 +178,11 @@ const PuppyCard: React.FC<PuppyCardProps> = ({ puppy, ageInWeeks, onInquire, ind
                 ? 'bg-teal-600 hover:bg-teal-700' 
                 : 'bg-gray-400 cursor-not-allowed'} 
                 text-white transition-all duration-300`}
-              onClick={puppy.status === 'available' ? onInquire : undefined}
+              onClick={puppy.status === 'available' ? handleAdoptMe : undefined}
               disabled={puppy.status !== 'available'}
-              aria-label={puppy.status === 'available' ? `Inquire about ${puppy.name}` : `${puppy.name} is reserved`}
+              aria-label={puppy.status === 'available' ? `Adopt ${puppy.name}` : `${puppy.name} is reserved`}
             >
-              {puppy.status === 'available' ? 'Inquire Now' : 'Reserved'}
+              {puppy.status === 'available' ? 'Adopt Me' : 'Reserved'}
             </Button>
           </motion.div>
         </CardContent>
