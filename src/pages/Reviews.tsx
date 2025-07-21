@@ -15,7 +15,7 @@ const Reviews = () => {
       puppy: "Golden Doodle - Charlie",
       adoptionDate: "March 2024",
       rating: 5,
-      story: "Our experience with Pick a Puppy was absolutely wonderful from start to finish! Charlie has brought so much joy to our family. The breeder was incredibly knowledgeable and supportive throughout the entire process. Charlie came home perfectly socialized, healthy, and well-adjusted. He's now 6 months old and the perfect addition to our family. We couldn't be happier!",
+      story: "Our experience with Happy Tails Breeder was absolutely wonderful from start to finish! Charlie has brought so much joy to our family. The breeder was incredibly knowledgeable and supportive throughout the entire process. Charlie came home perfectly socialized, healthy, and well-adjusted. He's now 6 months old and the perfect addition to our family. We couldn't be happier!",
       ownerImage: "",
       puppyThenImage: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80",
       puppyNowImage: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80",
@@ -28,7 +28,7 @@ const Reviews = () => {
       puppy: "Cavapoo - Mia",
       adoptionDate: "January 2024",
       rating: 5,
-      story: "Mia has been the perfect addition to our family! She's exactly as described - hypoallergenic, sweet-natured, and incredibly smart. The health guarantee gave us such peace of mind, and the ongoing support has been invaluable. She's great with our kids and has adapted beautifully to our home. We're already considering getting a second puppy from Pick a Puppy!",
+      story: "Mia has been the perfect addition to our family! She's exactly as described - hypoallergenic, sweet-natured, and incredibly smart. The health guarantee gave us such peace of mind, and the ongoing support has been invaluable. She's great with our kids and has adapted beautifully to our home. We're already considering getting a second puppy from Happy Tails Breeder!",
       ownerImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80",
       puppyThenImage: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80",
       puppyNowImage: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&q=80",
@@ -109,7 +109,7 @@ const Reviews = () => {
             </h1>
             <p className="text-xl text-amber-700 max-w-3xl mx-auto mb-12">
               Don't just take our word for it. Here are real stories from families who found 
-              their perfect companions through Pick a Puppy.
+              their perfect companions through Happy Tails Breeder.
             </p>
 
             {/* Stats */}

@@ -12,7 +12,7 @@ const TestimonialsSection = () => {
       location: "Austin, TX",
       puppy: "Golden Doodle - Charlie",
       rating: 5,
-      text: "Our experience with Pick a Puppy was absolutely wonderful! Charlie is the most well-behaved and loving dog. The breeder's expertise really shows in how well-socialized he is.",
+      text: "Our experience with Happy Tails Breeder was absolutely wonderful! Charlie is the most well-behaved and loving dog. The breeder's expertise really shows in how well-socialized he is.",
       image: ""
     },
     {
@@ -42,7 +42,7 @@ const TestimonialsSection = () => {
           </h2>
           <p className="text-xl text-amber-700 max-w-3xl mx-auto">
             Don't just take our word for it. Here's what our families have to say about 
-            their experience with Pick a Puppy and their new furry family members.
+            their experience with Happy Tails Breeder and their new furry family members.
           </p>
         </div>
 

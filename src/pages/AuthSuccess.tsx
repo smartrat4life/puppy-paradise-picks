@@ -59,7 +59,7 @@ const AuthSuccess = () => {
                 transition={{ delay: 0.3 }}
                 className="text-3xl font-bold text-amber-900 mb-4"
               >
-                {isSignUp ? 'Welcome to Pick a Puppy!' : 'Welcome Back!'}
+                {isSignUp ? 'Welcome to Happy Tails Breeder!' : 'Welcome Back!'}
               </motion.h1>
 
               <motion.p
