@@ -99,7 +99,7 @@ const Header = () => {
                 <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity">
                   <img 
                     src="/images/logo/puppy-logo.png" 
-                    alt="Happy Tails Breeder Logo" 
+                    alt="Pick a Puppy Logo" 
                     className="h-12 w-auto object-contain drop-shadow-md" 
                   />
                   <h1 className="text-2xl font-bold text-white font-serif tracking-tight">Puppy Paradise</h1>

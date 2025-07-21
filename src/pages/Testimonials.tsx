@@ -16,7 +16,7 @@ const testimonials = [
     date: 'June 2024',
     rating: 5,
     puppy: 'Golden Doodle - Max',
-    content: 'We adopted Max from Happy Tails Breeder and couldn\'t be happier! The entire process was smooth and transparent. Max came home healthy, happy, and already well-socialized. The team was incredibly supportive throughout our journey. The health guarantee gave us complete peace of mind, and the ongoing support has been invaluable.'
+    content: 'We adopted Max from Pick a Puppy and couldn\'t be happier! The entire process was smooth and transparent. Max came home healthy, happy, and already well-socialized. The team was incredibly supportive throughout our journey. The health guarantee gave us complete peace of mind, and the ongoing support has been invaluable.'
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const testimonials = [
     date: 'May 2024',
     rating: 5,
     puppy: 'Cavapoo - Luna',
-    content: 'Luna has been the perfect addition to our family. The health guarantee gave us peace of mind, and the support team was always available to answer our questions. The breeder\'s 13+ years of experience really shows in how well-adjusted and healthy Luna is. Highly recommend Happy Tails Breeder!'
+    content: 'Luna has been the perfect addition to our family. The health guarantee gave us peace of mind, and the support team was always available to answer our questions. The breeder\'s 13+ years of experience really shows in how well-adjusted and healthy Luna is. Highly recommend Pick a Puppy!'
   },
   {
     id: 3,
@@ -46,7 +46,7 @@ const testimonials = [
     date: 'March 2024',
     rating: 5,
     puppy: 'Doberman - Duke',
-    content: 'Duke is everything we hoped for in a Doberman - intelligent, loyal, and protective yet gentle with our children. The European bloodlines and health testing were important to us, and Happy Tails Breeder delivered exactly what was promised. The professionalism and care shown throughout the process was exceptional.'
+    content: 'Duke is everything we hoped for in a Doberman - intelligent, loyal, and protective yet gentle with our children. The European bloodlines and health testing were important to us, and Pick a Puppy delivered exactly what was promised. The professionalism and care shown throughout the process was exceptional.'
   },
   {
     id: 5,
@@ -66,7 +66,7 @@ const testimonials = [
     date: 'January 2024',
     rating: 5,
     puppy: 'Dachshund - Oscar',
-    content: 'Oscar has the most amazing personality! He\'s playful, loving, and full of character. The entire process was transparent and professional. The health testing on the parents and comprehensive health guarantee shows how much Happy Tails Breeder cares about their puppies\' well-being.'
+    content: 'Oscar has the most amazing personality! He\'s playful, loving, and full of character. The entire process was transparent and professional. The health testing on the parents and comprehensive health guarantee shows how much Pick a Puppy cares about their puppies\' well-being.'
   },
 ];
 
@@ -84,7 +84,7 @@ const Testimonials = () => {
               What Our Families Say
             </h1>
             <p className="text-xl text-amber-700 max-w-3xl mx-auto mb-12">
-              Real stories from families who found their perfect companions through Happy Tails Breeder. 
+              Real stories from families who found their perfect companions through Pick a Puppy. 
               These testimonials reflect our commitment to connecting healthy, happy puppies with loving homes.
             </p>
 

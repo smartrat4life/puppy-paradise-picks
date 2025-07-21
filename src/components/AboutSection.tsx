@@ -23,7 +23,7 @@ const AboutSection = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-amber-900 mb-6">
-            Why Choose Happy Tails Breeder?
+            Why Choose Pick a Puppy?
           </h2>
           <p className="text-xl text-amber-700 max-w-4xl mx-auto leading-relaxed">
             With 13 years of dedicated breeding experience, we've built our reputation on providing 

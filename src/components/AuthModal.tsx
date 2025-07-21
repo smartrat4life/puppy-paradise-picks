@@ -186,7 +186,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       <DialogContent className="sm:max-w-md" role="dialog" aria-describedby="auth-modal-description">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold text-amber-900">
-            Welcome to Happy Tails Breeder
+            Welcome to Pick a Puppy
           </DialogTitle>
           <DialogDescription id="auth-modal-description" className="text-center text-amber-700">
             Sign in to your account or create a new one to start finding your perfect puppy companion.

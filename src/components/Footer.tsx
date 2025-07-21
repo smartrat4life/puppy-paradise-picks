@@ -7,8 +7,8 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <img src="/images/logo/puppy-logo.png" alt="Happy Tails Breeder Logo" className="w-12 h-12 object-contain" />
-              <h3 className="text-2xl font-bold">Happy Tails Breeder</h3>
+              <img src="/images/logo/puppy-logo.png" alt="Pick a Puppy Logo" className="w-12 h-12 object-contain" />
+              <h3 className="text-2xl font-bold">Pick a Puppy</h3>
             </div>
             <p className="text-amber-200 leading-relaxed mb-4">
               Premium puppies from a trusted breeder with 13 years of experience. 
@@ -72,7 +72,7 @@ const Footer = () => {
 
         <div className="border-t border-amber-700 mt-8 pt-8 text-center">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-amber-200">© 2025 Happy Tails Breeder. All rights reserved.</p>
+            <p className="text-amber-200">© 2025 Pick a Puppy. All rights reserved.</p>
             <div className="flex gap-6 text-amber-200">
               <a href="/pricing" className="hover:text-white transition-colors duration-200">Pricing & Policies</a>
               <a href="/faq" className="hover:text-white transition-colors duration-200">FAQ</a>

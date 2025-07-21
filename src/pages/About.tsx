@@ -30,7 +30,7 @@ const About = () => {
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
             <p className="text-lg text-gray-600 mb-8">
-              At Happy Tails Breeder, we believe every dog deserves a loving home and every home deserves the perfect dog. 
+              At Pick a Puppy, we believe every dog deserves a loving home and every home deserves the perfect dog. 
               Our mission is to make the adoption process seamless, transparent, and joyful for both pets and their new families. 
               With over 13 years of experience, we've perfected our approach to breeding healthy, well-socialized puppies 
               that become cherished family members.
@@ -110,7 +110,7 @@ const About = () => {
                 <div className="md:w-2/3">
                   <h3 className="text-xl font-semibold mb-3">A Dream to Make a Difference</h3>
                   <p className="text-gray-600">
-                    Founded in 2012 by a team of passionate dog lovers, Happy Tails Breeder began with a simple goal: 
+                    Founded in 2012 by a team of passionate dog lovers, Pick a Puppy began with a simple goal: 
                     to create a better way to connect responsible breeders with loving families. What started as 
                     a small local initiative has grown into a trusted platform that prioritizes health, temperament, 
                     and the perfect match between puppy and family.
@@ -172,7 +172,7 @@ const About = () => {
           <h2 className="text-3xl font-bold mb-6">Ready to Find Your New Best Friend?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Browse our available puppies or learn more about our adoption process today. 
-            Join the hundreds of families who have found their perfect companions with Happy Tails Breeder.
+            Join the hundreds of families who have found their perfect companions with Pick a Puppy.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a 
