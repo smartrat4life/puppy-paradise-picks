@@ -19,6 +19,7 @@ import FAQ from "./pages/FAQ";
 import About from "./pages/About";
 import AuthSuccess from "./pages/AuthSuccess";
 import PuppyDetails from "./pages/PuppyDetails";
+import AdoptionApplication from "./pages/AdoptionApplication";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,24 +38,22 @@ const AnimatedRoutes = () => {
   const location = useLocation();
   
   return (
-    <>
-      <ScrollToTop />
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/testimonials" element={<Testimonials />} />
-          <Route path="/reviews" element={<Reviews />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/puppy/:id" element={<PuppyDetails />} />
-          <Route path="/auth-success" element={<AuthSuccess />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </AnimatePresence>
-    </>
+
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Index />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/testimonials" element={<Testimonials />} />
+        <Route path="/reviews" element={<Reviews />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/adoption-application" element={<AdoptionApplication />} />
+        <Route path="/auth-success" element={<AuthSuccess />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AnimatePresence>
   );
 };
 

@@ -21,14 +21,24 @@ export type Database = {
           applicant_name: string
           applicant_phone: string | null
           created_at: string
+          daily_exercise_time: string | null
+          desired_qualities: string[] | null
           experience_with_pets: string | null
+          financial_responsibility: string | null
           id: string
           living_situation: string | null
+          preferred_age: string | null
+          primary_caregiver: string | null
           puppy_id: string | null
+          puppy_location_when_away: string[] | null
+          puppy_sleep_location: string | null
           reason_for_adoption: string | null
           status: string
+          unable_to_keep_plan: string | null
           updated_at: string
           user_id: string | null
+          veterinarian_status: string | null
+          hours_alone: string | null
         }
         Insert: {
           admin_notes?: string | null
@@ -36,14 +46,24 @@ export type Database = {
           applicant_name: string
           applicant_phone?: string | null
           created_at?: string
+          daily_exercise_time?: string | null
+          desired_qualities?: string[] | null
           experience_with_pets?: string | null
+          financial_responsibility?: string | null
           id?: string
           living_situation?: string | null
+          preferred_age?: string | null
+          primary_caregiver?: string | null
           puppy_id?: string | null
+          puppy_location_when_away?: string[] | null
+          puppy_sleep_location?: string | null
           reason_for_adoption?: string | null
           status?: string
+          unable_to_keep_plan?: string | null
           updated_at?: string
           user_id?: string | null
+          veterinarian_status?: string | null
+          hours_alone?: string | null
         }
         Update: {
           admin_notes?: string | null
@@ -51,14 +71,24 @@ export type Database = {
           applicant_name?: string
           applicant_phone?: string | null
           created_at?: string
+          daily_exercise_time?: string | null
+          desired_qualities?: string[] | null
           experience_with_pets?: string | null
+          financial_responsibility?: string | null
           id?: string
           living_situation?: string | null
+          preferred_age?: string | null
+          primary_caregiver?: string | null
           puppy_id?: string | null
+          puppy_location_when_away?: string[] | null
+          puppy_sleep_location?: string | null
           reason_for_adoption?: string | null
           status?: string
+          unable_to_keep_plan?: string | null
           updated_at?: string
           user_id?: string | null
+          veterinarian_status?: string | null
+          hours_alone?: string | null
         }
         Relationships: [
           {

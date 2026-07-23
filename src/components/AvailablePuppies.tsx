@@ -116,6 +116,10 @@ const AvailablePuppies = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleApply = (puppyId: string) => {
+    window.location.href = `/adoption-application?puppyId=${puppyId}`;
+  };
+
   return (
     <section id="available" className="py-16 bg-gradient-to-br from-amber-50 to-orange-50 relative overflow-hidden">
       {/* Animated background decorations */}

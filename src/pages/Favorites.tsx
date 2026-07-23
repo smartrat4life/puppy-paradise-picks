@@ -5,7 +5,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Heart, Calendar, MapPin } from 'lucide-react';
+import { Heart, Calendar, MapPin, PawPrint } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -42,6 +42,10 @@ const Favorites: React.FC = () => {
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleApply = (puppyId: string) => {
+    window.location.href = `/adoption-application?puppyId=${puppyId}`;
   };
 
   return (
@@ -128,16 +132,29 @@ const Favorites: React.FC = () => {
                         {puppy.description}
                       </p>
                       
-                      <Button 
-                        className={`w-full ${puppy.status === 'available' 
-                          ? 'bg-teal-600 hover:bg-teal-700' 
-                          : 'bg-gray-400 cursor-not-allowed'} 
-                          text-white transition-all duration-300`}
-                        onClick={puppy.status === 'available' ? scrollToContact : undefined}
-                        disabled={puppy.status !== 'available'}
-                      >
-                        {puppy.status === 'available' ? 'Inquire Now' : 'Reserved'}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          className={`flex-1 ${puppy.status === 'available' 
+                            ? 'bg-teal-600 hover:bg-teal-700' 
+                            : 'bg-gray-400 cursor-not-allowed'} 
+                            text-white transition-all duration-300`}
+                          onClick={puppy.status === 'available' ? scrollToContact : undefined}
+                          disabled={puppy.status !== 'available'}
+                        >
+                          {puppy.status === 'available' ? 'Inquire' : 'Reserved'}
+                        </Button>
+                        <Button 
+                          className={`flex-1 ${puppy.status === 'available' 
+                            ? 'bg-amber-600 hover:bg-amber-700' 
+                            : 'bg-gray-400 cursor-not-allowed'} 
+                            text-white transition-all duration-300`}
+                          onClick={() => puppy.status === 'available' && handleApply(puppy.id)}
+                          disabled={puppy.status !== 'available'}
+                        >
+                          <PawPrint className="w-4 h-4 mr-2" />
+                          {puppy.status === 'available' ? 'Apply' : 'Reserved'}
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 );

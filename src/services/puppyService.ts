@@ -43,6 +43,29 @@ export class PuppyService {
     }
   }
 
+  static async getPuppyById(id: string): Promise<Puppy> {
+    console.log(`PuppyService.getPuppyById called for id: ${id}`);
+    
+    try {
+      const { data, error } = await supabase
+        .from('puppies')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        console.error('Supabase query error:', error);
+        handleSupabaseError('fetch puppy', error);
+      }
+
+      console.log('Successfully fetched puppy:', data);
+      return data!;
+    } catch (error) {
+      console.error('Unexpected error in getPuppyById:', error);
+      throw error;
+    }
+  }
+
   static async createPuppy(puppy: PuppyInsert): Promise<Puppy> {
     console.log('Creating new puppy:', puppy);
     try {

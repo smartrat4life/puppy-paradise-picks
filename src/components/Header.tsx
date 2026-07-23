@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, User, LogOut, Search, Heart } from 'lucide-react';
+import { Menu, X, User, LogOut, Search, Heart, PawPrint } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
@@ -184,10 +184,12 @@ const Header = () => {
                   FAQ
                 </MobileNavLink>
                 
-                {user && <MobileNavLink to="/favorites" onClick={() => setIsMenuOpen(false)}>
+                {user && (
+                  <MobileNavLink to="/favorites" onClick={() => setIsMenuOpen(false)}>
                     <Heart className="w-5 h-5 mr-2" />
                     Favorites
-                  </MobileNavLink>}
+                  </MobileNavLink>
+                )}
                 
                 {isAdmin && <MobileNavLink to="/admin" onClick={() => setIsMenuOpen(false)} className="bg-amber-700/30 hover:bg-amber-700/50">
                     Admin Dashboard

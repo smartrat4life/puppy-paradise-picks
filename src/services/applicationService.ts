@@ -1,6 +1,6 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { Database } from '@/integrations/supabase/types';
+import { Database, TablesInsert } from '@/integrations/supabase/types';
 
 export type Application = Database['public']['Tables']['adoption_applications']['Row'];
 export type ApplicationUpdate = Database['public']['Tables']['adoption_applications']['Update'];
@@ -18,6 +18,21 @@ export class ApplicationService {
     }
 
     return data || [];
+  }
+
+  static async submitApplication(applicationData: TablesInsert<'adoption_applications'>): Promise<Application> {
+    const { data, error } = await supabase
+      .from('adoption_applications')
+      .insert(applicationData)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error submitting application:', error);
+      throw new Error('Failed to submit application');
+    }
+
+    return data;
   }
 
   static async updateApplicationStatus(id: string, status: string): Promise<Application> {
