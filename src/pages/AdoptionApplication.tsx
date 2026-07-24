@@ -332,7 +332,7 @@ const AdoptionApplication: React.FC = () => {
 
       const { data, error } = await supabase
         .from('adoption_applications')
-        .insert(applicationData)
+        .insert(applicationData as any)
         .select()
         .single();
 
