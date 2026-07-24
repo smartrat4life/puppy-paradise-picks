@@ -7,10 +7,10 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -21,24 +21,14 @@ export type Database = {
           applicant_name: string
           applicant_phone: string | null
           created_at: string
-          daily_exercise_time: string | null
-          desired_qualities: string[] | null
           experience_with_pets: string | null
-          financial_responsibility: string | null
           id: string
           living_situation: string | null
-          preferred_age: string | null
-          primary_caregiver: string | null
           puppy_id: string | null
-          puppy_location_when_away: string[] | null
-          puppy_sleep_location: string | null
           reason_for_adoption: string | null
           status: string
-          unable_to_keep_plan: string | null
           updated_at: string
           user_id: string | null
-          veterinarian_status: string | null
-          hours_alone: string | null
         }
         Insert: {
           admin_notes?: string | null
@@ -46,24 +36,14 @@ export type Database = {
           applicant_name: string
           applicant_phone?: string | null
           created_at?: string
-          daily_exercise_time?: string | null
-          desired_qualities?: string[] | null
           experience_with_pets?: string | null
-          financial_responsibility?: string | null
           id?: string
           living_situation?: string | null
-          preferred_age?: string | null
-          primary_caregiver?: string | null
           puppy_id?: string | null
-          puppy_location_when_away?: string[] | null
-          puppy_sleep_location?: string | null
           reason_for_adoption?: string | null
           status?: string
-          unable_to_keep_plan?: string | null
           updated_at?: string
           user_id?: string | null
-          veterinarian_status?: string | null
-          hours_alone?: string | null
         }
         Update: {
           admin_notes?: string | null
@@ -71,24 +51,14 @@ export type Database = {
           applicant_name?: string
           applicant_phone?: string | null
           created_at?: string
-          daily_exercise_time?: string | null
-          desired_qualities?: string[] | null
           experience_with_pets?: string | null
-          financial_responsibility?: string | null
           id?: string
           living_situation?: string | null
-          preferred_age?: string | null
-          primary_caregiver?: string | null
           puppy_id?: string | null
-          puppy_location_when_away?: string[] | null
-          puppy_sleep_location?: string | null
           reason_for_adoption?: string | null
           status?: string
-          unable_to_keep_plan?: string | null
           updated_at?: string
           user_id?: string | null
-          veterinarian_status?: string | null
-          hours_alone?: string | null
         }
         Relationships: [
           {
@@ -349,10 +319,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      is_admin_user: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      is_admin_user: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
