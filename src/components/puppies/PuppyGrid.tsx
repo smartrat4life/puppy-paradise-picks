@@ -6,7 +6,7 @@ import { Puppy } from '@/services/puppyService';
 
 interface PuppyGridProps {
   puppies: Puppy[];
-  calculateAgeInWeeks: (birthDate: string) => number;
+  calculateAgeInWeeks: (birthDate: string, referenceDate?: string) => number;
   onInquire: () => void;
 }
 
@@ -33,7 +33,7 @@ const PuppyGrid: React.FC<PuppyGridProps> = ({ puppies, calculateAgeInWeeks, onI
     >
       <AnimatePresence>
         {puppies.map((puppy, index) => {
-          const ageInWeeks = calculateAgeInWeeks(puppy.birth_date);
+          const ageInWeeks = calculateAgeInWeeks(puppy.birth_date, puppy.created_at);
           return (
             <PuppyCard
               key={puppy.id}

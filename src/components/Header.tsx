@@ -119,6 +119,9 @@ const Header = () => {
                 <NavLink to="/faq" className="px-4 py-2 text-sm font-medium text-amber-100 hover:bg-amber-700/50 hover:text-white rounded-lg transition-all duration-200">
                   FAQ
                 </NavLink>
+                <NavLink to="/adoption-application" className="px-4 py-2 text-sm font-medium text-amber-100 hover:bg-amber-700/50 hover:text-white rounded-lg transition-all duration-200">
+                  Apply
+                </NavLink>
                 {user && <NavLink to="/favorites" className="px-4 py-2 text-sm font-medium text-amber-100 hover:bg-amber-700/50 hover:text-white rounded-lg transition-all duration-200 flex items-center gap-1.5">
                     <Heart className="w-4 h-4 fill-current" />
                     Favorites
@@ -182,6 +185,9 @@ const Header = () => {
                 </MobileNavLink>
                 <MobileNavLink to="/faq" onClick={() => setIsMenuOpen(false)}>
                   FAQ
+                </MobileNavLink>
+                <MobileNavLink to="/adoption-application" onClick={() => setIsMenuOpen(false)}>
+                  Apply
                 </MobileNavLink>
                 
                 {user && (
