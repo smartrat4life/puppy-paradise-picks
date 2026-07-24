@@ -33,10 +33,12 @@ const PuppySpotlight = () => {
     }
   }, [currentPuppyIndex, availablePuppies]);
 
-  const calculateAge = (birthDate: string) => {
+  // Static age based on when the puppy was listed (created_at),
+  // so ages don't advance as days pass.
+  const calculateAge = (birthDate: string, referenceDate?: string) => {
+    const ref = referenceDate ? new Date(referenceDate) : new Date();
     const birth = new Date(birthDate);
-    const now = new Date();
-    const ageInMs = now.getTime() - birth.getTime();
+    const ageInMs = ref.getTime() - birth.getTime();
     const ageInWeeks = Math.floor(ageInMs / (1000 * 60 * 60 * 24 * 7));
     return ageInWeeks;
   };
@@ -82,7 +84,7 @@ const PuppySpotlight = () => {
     );
   }
 
-  const ageInWeeks = calculateAge(featuredPuppy.birth_date);
+  const ageInWeeks = calculateAge(featuredPuppy.birth_date, (featuredPuppy as any).created_at);
   const highlights = [
     'AKC Registered',
     'Health Guarantee', 

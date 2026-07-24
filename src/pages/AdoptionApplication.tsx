@@ -338,6 +338,25 @@ const AdoptionApplication: React.FC = () => {
 
       if (error) throw error;
 
+      // Also send to Formspree for email notification
+      try {
+        await fetch('https://formspree.io/f/mdaqpnka', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            ...applicationData,
+            puppy_name: selectedPuppy?.name || null,
+            puppy_breed: selectedPuppy?.breed || null,
+            _subject: `New Adoption Application from ${applicationData.applicant_name}`,
+          }),
+        });
+      } catch (formspreeError) {
+        console.error('Formspree submission failed:', formspreeError);
+      }
+
       toast({
         title: 'Application Submitted!',
         description: 'Your adoption application has been submitted successfully. We will contact you soon.',
