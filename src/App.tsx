@@ -50,6 +50,7 @@ const AnimatedRoutes = () => {
         <Route path="/admin" element={<Admin />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/adoption-application" element={<AdoptionApplication />} />
+        <Route path="/puppy/:id" element={<PuppyDetails />} />
         <Route path="/auth-success" element={<AuthSuccess />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

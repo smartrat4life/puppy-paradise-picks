@@ -183,6 +183,9 @@ const Header = () => {
                 <MobileNavLink to="/faq" onClick={() => setIsMenuOpen(false)}>
                   FAQ
                 </MobileNavLink>
+                <MobileNavLink to="/adoption-application" onClick={() => setIsMenuOpen(false)}>
+                  Apply
+                </MobileNavLink>
                 
                 {user && (
                   <MobileNavLink to="/favorites" onClick={() => setIsMenuOpen(false)}>

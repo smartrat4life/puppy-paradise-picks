@@ -21,11 +21,12 @@ export const usePuppyFilters = (puppies: Puppy[]) => {
     return () => window.removeEventListener('headerSearch', handleHeaderSearch as EventListener);
   }, []);
 
-  // Calculate age in weeks
-  const calculateAgeInWeeks = (birthDate: string) => {
-    const today = new Date();
+  // Calculate age in weeks — static, based on when the puppy was listed
+  // so ages don't advance as days pass.
+  const calculateAgeInWeeks = (birthDate: string, referenceDate?: string) => {
+    const ref = referenceDate ? new Date(referenceDate) : new Date();
     const birth = new Date(birthDate);
-    const diffTime = Math.abs(today.getTime() - birth.getTime());
+    const diffTime = Math.abs(ref.getTime() - birth.getTime());
     const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
     return diffWeeks;
   };

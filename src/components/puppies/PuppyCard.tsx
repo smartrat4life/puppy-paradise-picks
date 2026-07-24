@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +24,8 @@ const PuppyCard: React.FC<PuppyCardProps> = ({
   index = 0,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
+  const goToDetails = () => navigate(`/puppy/${puppy.id}`);
 
   const descriptionLimit = 120;
 
@@ -186,7 +189,7 @@ const PuppyCard: React.FC<PuppyCardProps> = ({
                   ? 'bg-teal-600 hover:bg-teal-700'
                   : 'bg-gray-400 cursor-not-allowed'
               } text-white transition-all duration-300`}
-              onClick={puppy.status === 'available' ? onInquire : undefined}
+              onClick={puppy.status === 'available' ? goToDetails : undefined}
               disabled={puppy.status !== 'available'}
               aria-label={
                 puppy.status === 'available'
