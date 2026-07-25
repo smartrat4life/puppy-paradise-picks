@@ -224,7 +224,7 @@ const PuppyDetails = () => {
     );
   }
 
-  const ageInWeeks = calculateAgeInWeeks(puppy.birth_date);
+  const ageInWeeks = calculateAgeInWeeks(puppy.birth_date, (puppy as any).created_at);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">
