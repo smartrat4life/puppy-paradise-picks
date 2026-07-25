@@ -20,6 +20,7 @@ import About from "./pages/About";
 import AuthSuccess from "./pages/AuthSuccess";
 import PuppyDetails from "./pages/PuppyDetails";
 import AdoptionApplication from "./pages/AdoptionApplication";
+import ApplicationSuccess from "./pages/ApplicationSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ const AnimatedRoutes = () => {
         <Route path="/admin" element={<Admin />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/adoption-application" element={<AdoptionApplication />} />
+        <Route path="/application-success" element={<ApplicationSuccess />} />
         <Route path="/puppy/:id" element={<PuppyDetails />} />
         <Route path="/auth-success" element={<AuthSuccess />} />
         <Route path="*" element={<NotFound />} />
