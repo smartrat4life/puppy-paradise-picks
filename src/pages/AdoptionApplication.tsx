@@ -409,52 +409,104 @@ const AdoptionApplication: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-12">
-              <div className="flex justify-center mb-4">
-                <div className="bg-teal-100 p-4 rounded-full">
-                  <PawPrint className="w-12 h-12 text-teal-600" />
-                </div>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-amber-900 mb-4">
-                Adoption Application
-              </h1>
-              <p className="text-xl text-amber-700">
-                # 🐾 Pick A Puppy Adoption Policy
+<div className="text-center mb-12">
+  <div className="flex justify-center mb-4">
+    <div className="bg-teal-100 p-4 rounded-full">
+      <PawPrint className="w-12 h-12 text-teal-600" />
+    </div>
+  </div>
 
-Adopting a puppy is a serious, lifelong commitment. Puppies require time, attention, love, and financial responsibility. They are not just pets. They become cherished members of your family.
+  <h1 className="text-4xl md:text-5xl font-bold text-amber-900 mb-4">
+    Adoption Application
+  </h1>
 
-Please take time to consider your decision carefully. Too many puppies are returned because adopters did not fully think through the responsibilities of pet ownership.
+  <div className="max-w-4xl mx-auto text-left bg-white rounded-2xl shadow-sm border border-amber-200 p-8 space-y-8">
+    {/* Introduction */}
+    <div>
+      <h2 className="text-2xl font-bold text-amber-900 mb-4 flex items-center gap-2">
+        🐾 Pick A Puppy Adoption Policy
+      </h2>
 
-At **Pick A Puppy**, our priority is to place each puppy in a home that truly matches their needs, ensuring the best outcome for both the puppy and the adopter.
+      <div className="space-y-4 text-amber-700 leading-7">
+        <p>
+          Adopting a puppy is a serious, lifelong commitment. Puppies require
+          time, attention, love, and financial responsibility. They are not
+          just pets. They become cherished members of your family.
+        </p>
 
-## 🐶 Puppy Care Before Adoption
+        <p>
+          Please take time to consider your decision carefully. Too many
+          puppies are returned because adopters did not fully think through the
+          responsibilities of pet ownership.
+        </p>
 
-All puppies available through Pick A Puppy are:
+        <p>
+          At <strong>Pick A Puppy</strong>, our priority is to place each puppy
+          in a home that truly matches their needs, ensuring the best outcome
+          for both the puppy and the adopter.
+        </p>
+      </div>
+    </div>
 
-* Spayed/neutered (when age-appropriate)
-* Vaccinated
-* Dewormed
-* Microchipped
+    {/* Puppy Care */}
+    <div>
+      <h3 className="text-xl font-semibold text-teal-700 mb-3">
+        🐶 Puppy Care Before Adoption
+      </h3>
 
-## 🚫 Right to Refuse Adoption
+      <ul className="list-disc pl-6 space-y-2 text-amber-700">
+        <li>Spayed/neutered (when age-appropriate)</li>
+        <li>Vaccinated</li>
+        <li>Dewormed</li>
+        <li>Microchipped</li>
+      </ul>
+    </div>
 
-Pick A Puppy reserves the right to decline any adoption if we believe it is not in the best interest of the puppy.
+    {/* Right to Refuse */}
+    <div>
+      <h3 className="text-xl font-semibold text-red-600 mb-3">
+        🚫 Right to Refuse Adoption
+      </h3>
 
-We will not proceed with applicants who provide false, misleading, or incomplete information.
+      <div className="space-y-4 text-amber-700 leading-7">
+        <p>
+          Pick A Puppy reserves the right to decline any adoption if we believe
+          it is not in the best interest of the puppy.
+        </p>
 
-Our application and consultation process is designed to help each puppy find the most compatible family.
+        <p>
+          We will not proceed with applicants who provide false, misleading, or
+          incomplete information.
+        </p>
 
-## ✅ Adopter Qualifications
+        <p>
+          Our application and consultation process is designed to help each
+          puppy find the most compatible family.
+        </p>
+      </div>
+    </div>
 
-To be considered as an adopter, you must:
+    {/* Qualifications */}
+    <div>
+      <h3 className="text-xl font-semibold text-green-700 mb-3">
+        ✅ Adopter Qualifications
+      </h3>
 
-* Be 21 years of age or older.
-* Provide valid identification with your current address.
-* Be able and willing to invest the time, care, and financial resources needed for proper medical treatment and lifelong care.
+      <p className="text-amber-700 mb-4">
+        To be considered as an adopter, you must:
+      </p>
 
-              </p>
-            </div>
-
+      <ul className="list-disc pl-6 space-y-2 text-amber-700">
+        <li>Be 21 years of age or older.</li>
+        <li>Provide valid identification with your current address.</li>
+        <li>
+          Be able and willing to invest the time, care, and financial resources
+          needed for proper medical treatment and lifelong care.
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
             {/* Selected Puppy Info */}
             {selectedPuppy && (
               <Card className="mb-8 border-2 border-teal-200 bg-gradient-to-r from-teal-50 to-amber-50">
