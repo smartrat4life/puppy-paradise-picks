@@ -61,10 +61,10 @@ const PuppyDetails = () => {
     checkFavoriteStatus();
   }, [user, puppy, isFavorite]);
 
-  const calculateAgeInWeeks = (birthDate: string) => {
+  const calculateAgeInWeeks = (birthDate: string, referenceDate?: string) => {
     const birth = new Date(birthDate);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - birth.getTime());
+    const ref = referenceDate ? new Date(referenceDate) : new Date();
+    const diffTime = Math.abs(ref.getTime() - birth.getTime());
     const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
     return diffWeeks;
   };
@@ -224,7 +224,7 @@ const PuppyDetails = () => {
     );
   }
 
-  const ageInWeeks = calculateAgeInWeeks(puppy.birth_date);
+  const ageInWeeks = calculateAgeInWeeks(puppy.birth_date, (puppy as any).created_at);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">

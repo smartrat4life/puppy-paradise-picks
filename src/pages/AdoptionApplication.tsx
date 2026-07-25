@@ -305,56 +305,71 @@ const AdoptionApplication: React.FC = () => {
 
     setIsLoading(true);
 
+    const applicationData = {
+      applicant_name: formData.applicant_name.trim(),
+      applicant_email: formData.applicant_email.trim(),
+      applicant_phone: formData.applicant_phone.trim() || null,
+      puppy_id: formData.puppy_id || null,
+      living_situation: formData.living_situation.trim(),
+      experience_with_pets: formData.experience_with_pets.trim(),
+      reason_for_adoption: formData.reason_for_adoption.trim(),
+      primary_caregiver: formData.primary_caregiver.trim(),
+      hours_alone: formData.hours_alone,
+      puppy_location_when_away: formData.puppy_location_when_away,
+      puppy_sleep_location: formData.puppy_sleep_location,
+      preferred_age: formData.preferred_age,
+      daily_exercise_time: formData.daily_exercise_time,
+      desired_qualities: formData.desired_qualities,
+      financial_responsibility: formData.financial_responsibility,
+      unable_to_keep_plan: formData.unable_to_keep_plan.trim(),
+      veterinarian_status: formData.veterinarian_status,
+      status: 'pending',
+      user_id: user?.id || null,
+    };
+
+    // Send to Formspree first (independent of DB result)
+    let formspreeOk = false;
+    try {
+      const formspreePayload: Record<string, any> = {
+        ...applicationData,
+        puppy_location_when_away: formData.puppy_location_when_away.join(', '),
+        desired_qualities: formData.desired_qualities.join(', '),
+        has_yard: formData.has_yard ? 'Yes' : 'No',
+        has_other_pets: formData.has_other_pets ? 'Yes' : 'No',
+        has_children: formData.has_children ? 'Yes' : 'No',
+        children_ages: formData.children_ages || null,
+        puppy_name: selectedPuppy?.name || null,
+        puppy_breed: selectedPuppy?.breed || null,
+        _subject: `New Adoption Application from ${applicationData.applicant_name}`,
+      };
+      const fsRes = await fetch('https://formspree.io/f/mdaqpnka', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(formspreePayload),
+      });
+      formspreeOk = fsRes.ok;
+      if (!fsRes.ok) {
+        const errText = await fsRes.text();
+        console.error('Formspree responded with error:', fsRes.status, errText);
+      }
+    } catch (formspreeError) {
+      console.error('Formspree submission failed:', formspreeError);
+    }
+
     try {
       const { supabase } = await import('@/integrations/supabase/client');
-
-      const applicationData = {
-        applicant_name: formData.applicant_name.trim(),
-        applicant_email: formData.applicant_email.trim(),
-        applicant_phone: formData.applicant_phone.trim() || null,
-        puppy_id: formData.puppy_id || null,
-        living_situation: formData.living_situation.trim(),
-        experience_with_pets: formData.experience_with_pets.trim(),
-        reason_for_adoption: formData.reason_for_adoption.trim(),
-        primary_caregiver: formData.primary_caregiver.trim(),
-        hours_alone: formData.hours_alone,
-        puppy_location_when_away: formData.puppy_location_when_away,
-        puppy_sleep_location: formData.puppy_sleep_location,
-        preferred_age: formData.preferred_age,
-        daily_exercise_time: formData.daily_exercise_time,
-        desired_qualities: formData.desired_qualities,
-        financial_responsibility: formData.financial_responsibility,
-        unable_to_keep_plan: formData.unable_to_keep_plan.trim(),
-        veterinarian_status: formData.veterinarian_status,
-        status: 'pending',
-        user_id: user?.id || null,
-      };
-
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('adoption_applications')
         .insert(applicationData as any)
         .select()
         .single();
 
-      if (error) throw error;
-
-      // Also send to Formspree for email notification
-      try {
-        await fetch('https://formspree.io/f/mdaqpnka', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            ...applicationData,
-            puppy_name: selectedPuppy?.name || null,
-            puppy_breed: selectedPuppy?.breed || null,
-            _subject: `New Adoption Application from ${applicationData.applicant_name}`,
-          }),
-        });
-      } catch (formspreeError) {
-        console.error('Formspree submission failed:', formspreeError);
+      if (error) {
+        console.error('Supabase insert failed:', error);
+        if (!formspreeOk) throw error;
       }
 
       toast({
