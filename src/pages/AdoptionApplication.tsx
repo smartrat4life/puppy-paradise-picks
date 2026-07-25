@@ -419,7 +419,39 @@ const AdoptionApplication: React.FC = () => {
                 Adoption Application
               </h1>
               <p className="text-xl text-amber-700">
-                Take the first step toward finding your perfect companion
+                # 🐾 Pick A Puppy Adoption Policy
+
+Adopting a puppy is a serious, lifelong commitment. Puppies require time, attention, love, and financial responsibility. They are not just pets. They become cherished members of your family.
+
+Please take time to consider your decision carefully. Too many puppies are returned because adopters did not fully think through the responsibilities of pet ownership.
+
+At **Pick A Puppy**, our priority is to place each puppy in a home that truly matches their needs, ensuring the best outcome for both the puppy and the adopter.
+
+## 🐶 Puppy Care Before Adoption
+
+All puppies available through Pick A Puppy are:
+
+* Spayed/neutered (when age-appropriate)
+* Vaccinated
+* Dewormed
+* Microchipped
+
+## 🚫 Right to Refuse Adoption
+
+Pick A Puppy reserves the right to decline any adoption if we believe it is not in the best interest of the puppy.
+
+We will not proceed with applicants who provide false, misleading, or incomplete information.
+
+Our application and consultation process is designed to help each puppy find the most compatible family.
+
+## ✅ Adopter Qualifications
+
+To be considered as an adopter, you must:
+
+* Be 21 years of age or older.
+* Provide valid identification with your current address.
+* Be able and willing to invest the time, care, and financial resources needed for proper medical treatment and lifelong care.
+
               </p>
             </div>
 
