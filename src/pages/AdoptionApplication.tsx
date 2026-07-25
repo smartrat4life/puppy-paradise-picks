@@ -377,7 +377,18 @@ const AdoptionApplication: React.FC = () => {
         description: 'Your adoption application has been submitted successfully. We will contact you soon.',
       });
 
-      navigate('/favorites');
+      navigate('/application-success', {
+        state: {
+          application: {
+            ...applicationData,
+            has_yard: formData.has_yard,
+            has_other_pets: formData.has_other_pets,
+            has_children: formData.has_children,
+            children_ages: formData.children_ages || null,
+          },
+          puppy: selectedPuppy ? { name: selectedPuppy.name, breed: selectedPuppy.breed } : null,
+        },
+      });
     } catch (error) {
       console.error('Error submitting application:', error);
       toast({
