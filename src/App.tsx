@@ -20,6 +20,7 @@ import About from "./pages/About";
 import AuthSuccess from "./pages/AuthSuccess";
 import PuppyDetails from "./pages/PuppyDetails";
 import AdoptionApplication from "./pages/AdoptionApplication";
+import ApplicationSuccess from "./pages/ApplicationSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
