@@ -196,10 +196,10 @@ const FAQ = () => {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <a 
-                      href="tel:+0001234567"
+                      href="tel:+12029364192"
                       className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-full font-semibold transition-colors duration-300"
                     >
-                      Call Us: (000) 123-4567
+                      Call Us: (202) 936-4192
                     </a>
                     <a 
                       href="mailto:pickapuppy@gmail.com"
